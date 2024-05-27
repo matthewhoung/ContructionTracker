@@ -10,7 +10,7 @@ namespace Infrastructure.Configurations
         public static IServiceCollection AddMySQLConnection(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IDbConnection>(provider =>
-                    new MySqlConnection(configuration.GetConnectionString("MySQLConnection")));
+                    new MySqlConnection(configuration.GetConnectionString("DefaultConnection")));
 
             return services;
         }

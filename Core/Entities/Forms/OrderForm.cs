@@ -14,13 +14,19 @@ namespace Core.Entities.Forms
         public int ProjectId { get; set; }
         public string OrderName { get; set; }
         public string OrderDescription { get; set; }
-        public WorkerType WorkerType { get; set; }
-        public WorkerTeam WorkerTeam { get; set; }
-        public Department Department { get; set; }
+        public int WorkerTypeId { get; set; }
+        public string WorkerTypeName { get; set; }
+        public int WorkerTeamId { get; set; }
+        public string WorkerTeamName { get; set; }
+        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
         public int PayAmount { get; set; }
-        public PayType PayType { get; set; }
-        public PayBy PayBy { get; set; }
+        public int PayTypeId { get; set; }
+        public string PayTypeName { get; set; }
+        public int PayById { get; set; }
+        public string PayByName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
+
 }
