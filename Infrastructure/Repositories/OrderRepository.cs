@@ -140,8 +140,9 @@ namespace Infrastructure.Repositories
                 INSERT INTO pay_by
                     (pay_by_id, pay_by_name)
                 VALUES
-                    (@PayById, @PayByName";
+                    (@PayById, @PayByName)";
             var parameters = new { PayById = payBy.PayById, PayByName = payBy.PayByName };
+            await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
         public async Task CreatePayTypeAsync(PayType payType)
@@ -152,6 +153,7 @@ namespace Infrastructure.Repositories
                 VALUES
                     (@PayTypeId, @PayTypeName)";
             var parameters = new { PayTypeId = payType.PayTypeId, PayTypeName = payType.PayTypeName };
+            await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
         public async Task CreateUnitAsync(UnitClass unitClass)
@@ -162,8 +164,8 @@ namespace Infrastructure.Repositories
                 VALUES
                     (@UnitId, @UnitName)";
             var parameters = new { UnitId = unitClass.UnitId, UnitName = unitClass.UnitName };
+            await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
-
 
         public Task<OrderForm> GetOrderAllAsync()
         {
