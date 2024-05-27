@@ -51,5 +51,33 @@ namespace Presentation.Controllers
             await _orderServices.CreateWorkerTeamListAsync(workerTeam);
             return ResponseStandardConfiguration.StandardizeResponse("Worker Team Created", HttpStatusCode.Created, "201", workerTeam);
         }
+
+        [HttpPost("create/department")]
+        public async Task<IActionResult> CreateDepartmentAsync(Department department)
+        {
+            await _orderServices.CreateDepartmentAsync(department);
+            return ResponseStandardConfiguration.StandardizeResponse("Department Created", HttpStatusCode.Created, "201", department);
+        }
+
+        [HttpPost("create/payby")]
+        public async Task<IActionResult> CreatePayByAsync(PayBy payBy)
+        {
+            await _orderServices.CreatePayByAsync(payBy);
+            return ResponseStandardConfiguration.StandardizeResponse("Pay By Created", HttpStatusCode.Created, "201", payBy);
+        }
+
+        [HttpPost("create/paytype")]
+        public async Task<IActionResult> CreatePayTypeAsync(PayType payType)
+        {
+            await _orderServices.CreatePayTypeAsync(payType);
+            return ResponseStandardConfiguration.StandardizeResponse("Pay Type Created", HttpStatusCode.Created, "201", payType);
+        }
+
+        [HttpPost("create/unit")]
+        public async Task<IActionResult> CreateUnitAsync(UnitClass unitClass)
+        {
+            await _orderServices.CreateUnitAsync(unitClass);
+            return ResponseStandardConfiguration.StandardizeResponse("Unit Created", HttpStatusCode.Created, "201", unitClass);
+        }
     }
 }

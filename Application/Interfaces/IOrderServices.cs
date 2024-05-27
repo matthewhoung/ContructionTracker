@@ -9,5 +9,9 @@ namespace Application.Interfaces
         Task CreateWorkerClassListAsync(WorkerClass workerClass);
         Task CreateWorkerTypeListAsync(WorkerType workerType);
         Task CreateWorkerTeamListAsync(WorkerTeam workerTeam);
+        Task CreateDepartmentAsync(Department department);
+        Task CreatePayByAsync(PayBy payBy);
+        Task CreatePayTypeAsync(PayType payType);
+        Task CreateUnitAsync(UnitClass unitClass);
     }
 }

@@ -2,7 +2,7 @@
 {
     public class PayBy
     {
-        public int PayViaId { get; set; }
-        public string PayViaName { get; set; }
+        public int PayById { get; set; }
+        public string PayByName { get; set; }
     }
 }

@@ -32,5 +32,24 @@ namespace Application.Services
         {
             await _orderRepository.CreateWorkerTypeAsync(workerType);
         }
+        public async Task CreateDepartmentAsync(Department department)
+        {
+            await _orderRepository.CreateDepartmentAsync(department);
+        }
+
+        public async Task CreatePayByAsync(PayBy payBy)
+        {
+            await _orderRepository.CreatePayByAsync(payBy);
+        }
+
+        public async Task CreatePayTypeAsync(PayType payType)
+        {
+            await _orderRepository.CreatePayTypeAsync(payType);
+        }
+
+        public async Task CreateUnitAsync(UnitClass unitClass)
+        {
+            await _orderRepository.CreateUnitAsync(unitClass);
+        }
     }
 }

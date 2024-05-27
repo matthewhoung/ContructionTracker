@@ -62,38 +62,6 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task CreatePayByAsync(int payById, string payByName)
-        {
-            var writeCommand = @"
-                INSERT INTO pay_by
-                    (pay_by_id, pay_by_name)
-                VALUES
-                    (@payById, @payByName)";
-            var parameters = new { PayById = payById, PayByName = payByName };
-            await _dbConnection.ExecuteAsync(writeCommand, parameters);
-        }
-
-        public async Task CreatePayTypeAsync(int payTypeId, string payTypeName)
-        {
-            var writeCommand = @"
-                INSERT INTO pay_types
-                    (pay_type_id, pay_type_name)
-                VALUES
-                    (@payTypeId, @payTypeName)";
-            var parameters = new { PayTypeId = payTypeId, PayTypeName = payTypeName };
-            await _dbConnection.ExecuteAsync(writeCommand, parameters);
-        }
-
-        public async Task CreateUnitAsync(int unitId, string unitName)
-        {
-            var writeCommand = @"
-                INSERT INTO units
-                    (unit_id, unit_name)
-                VALUES
-                    (@unitId, @unitName);";
-            var parameters = new { UnitId = unitId, UnitName = unitName };
-            await _dbConnection.ExecuteAsync(writeCommand, parameters);
-        }
 
         public async Task CreateWorkerClassAsync(WorkerClass workerClass)
         {
@@ -155,22 +123,47 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
-        public async Task CreateDepartmentAsync(int departmentId, string departmentName)
+        public async Task CreateDepartmentAsync(Department department)
         {
             var writeCommand = @"
                 INSERT INTO departments
                     (department_id, department_name)
                 VALUES
-                    (@departmentId, @departmentName)";
-            var parameters = new { DepartmentId = departmentId, DepartmentName = departmentName };
+                    (@DepartmentId, @DepartmentName)";
+            var parameters = new { DepartmentId = department.DepartmentId, DepartmentName = department.DepartmentName };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
-
-        public Task<IReadOnlyList<Department>> GetDepartmentsAsync()
+        public async Task CreatePayByAsync(PayBy payBy)
         {
-            throw new NotImplementedException();
+            var writeCommand = @"
+                INSERT INTO pay_by
+                    (pay_by_id, pay_by_name)
+                VALUES
+                    (@PayById, @PayByName";
+            var parameters = new { PayById = payBy.PayById, PayByName = payBy.PayByName };
         }
+
+        public async Task CreatePayTypeAsync(PayType payType)
+        {
+            var writeCommand = @"
+                INSERT INTO pay_types
+                    (pay_type_id, pay_type_name)
+                VALUES
+                    (@PayTypeId, @PayTypeName)";
+            var parameters = new { PayTypeId = payType.PayTypeId, PayTypeName = payType.PayTypeName };
+        }
+
+        public async Task CreateUnitAsync(UnitClass unitClass)
+        {
+            var writeCommand = @"
+                INSERT INTO units
+                    (unit_id, unit_name)
+                VALUES
+                    (@UnitId, @UnitName)";
+            var parameters = new { UnitId = unitClass.UnitId, UnitName = unitClass.UnitName };
+        }
+
 
         public Task<OrderForm> GetOrderAllAsync()
         {

@@ -10,10 +10,10 @@ namespace Application.Application
         Task CreateWorkerClassAsync(WorkerClass workerClass);
         Task CreateWorkerTypeAsync(WorkerType workerType);
         Task CreateWorkerTeamAsync(WorkerTeam workerTeam);
-        Task CreateDepartmentAsync(int departmentId, string departmentName);
-        Task CreateUnitAsync(int unitId, string unitName);
-        Task CreatePayTypeAsync(int payTypeId, string payTypeName);
-        Task CreatePayByAsync(int payById, string payByName);
+        Task CreateDepartmentAsync(Department department);
+        Task CreateUnitAsync(UnitClass unitClass);
+        Task CreatePayTypeAsync(PayType payType);
+        Task CreatePayByAsync(PayBy payBy);
         Task<OrderForm> GetOrderAllAsync();
         Task<OrderForm> GetOrderByIdAsync(int id);
         Task<IReadOnlyList<PayBy>> GetPayByAsync();
