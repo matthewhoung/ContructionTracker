@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Interfaces;
+using Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Configurations
 {
@@ -6,7 +8,8 @@ namespace Application.Configurations
     {
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
-            //services.AddScoped<IDomainService, DomainService>();
+            services.AddScoped<IOrderServices, OrderService>();
+
             return services;
         }
     }

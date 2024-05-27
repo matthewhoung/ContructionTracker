@@ -1,10 +1,12 @@
-﻿using Core.Entities.Forms;
+﻿using Application.Application;
+using Core.Entities.Forms;
+using Core.Entities.Settings;
 using Dapper;
 using System.Data;
 
 namespace Infrastructure.Repositories
 {
-    public class OrderRepository
+    public class OrderRepository : IOrderRepository
     {
         private readonly IDbConnection _dbConnection;
 
@@ -13,60 +15,85 @@ namespace Infrastructure.Repositories
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<ReceiveForm>> GetAllAsync()
+        public async Task<int> CreateOrderAsync(OrderForm order)
         {
-            var sql = @"
-            SELECT 
-                rf.ReceiveId, rf.IsChecked, rf.ReceiveItem,
-                of.Id, of.CreatorId, of.ProjectId, of.WorkerType, 
-                of.WorkerTeam, of.Department, of.PayAmount, of.PayType
-            FROM ReceiveForms rf
-            JOIN OrderForms of ON rf.Id = of.Id";
-
-            var result = await _dbConnection.QueryAsync<ReceiveForm, OrderForm, ReceiveForm>(
-                sql,
-                (rf, of) =>
-                {
-                    rf.Id = of.Id;
-                    rf.CreatorId = of.CreatorId;
-                    rf.ProjectId = of.ProjectId;
-                    rf.WorkerType = of.WorkerType;
-                    rf.WorkerTeam = of.WorkerTeam;
-                    rf.Department = of.Department;
-                    rf.PayAmount = of.PayAmount;
-                    rf.PayType = of.PayType;
-                    return rf;
-                },
-                splitOn: "Id");
-
-            return result;
+            var writeCommand = @"
+                    INSERT INTO order_forms
+                        (project_id, 
+                        creator_id,
+                        creator_checked,
+                        supervisor_id,
+                        supervisor_checked,
+                        director_id,
+                        director_checked,
+                        order_name,
+                        order_description,
+                        worker_type_id,
+                        worker_team_id,
+                        department_id,
+                        pay_amount,
+                        pay_by,
+                        created_at,
+                        updated_at)
+                    VALUES
+                        (@ProjectId,
+                        @CreatorId,
+                        @CreatorChecked,
+                        @SupervisorId,
+                        @SupervisorChecked,
+                        @DirectorId,
+                        @DirectorChecked,
+                        @OrderName,
+                        @OrderDescription,
+                        @WorkerType.Id,
+                        @WorkerTeam.Id,
+                        @Department.Id,
+                        @PayAmount,
+                        @PayBy.Id,
+                        @CreatedAt,
+                        @UpdatedAt);
+                    SELECT LAST_INSERT_ID();";
+            return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, order);
         }
 
-        public async Task<int> InsertAsync(ReceiveForm receiveForm)
+        public Task<int> CreatOrderItemAsync(OrderItems orderItems)
         {
-            var sql = @"
-            INSERT INTO OrderForms (CreatorId, ProjectId, WorkerType, WorkerTeam, Department, PayAmount, PayType)
-            VALUES (@CreatorId, @ProjectId, @WorkerType, @WorkerTeam, @Department, @PayAmount, @PayType);
-            INSERT INTO ReceiveForms (Id, IsChecked, ReceiveItem)
-            VALUES (@Id, @IsChecked, @ReceiveItem);
-            SELECT CAST(SCOPE_IDENTITY() as int)";
+            throw new NotImplementedException();
+        }
 
-            var parameters = new
-            {
-                receiveForm.CreatorId,
-                receiveForm.ProjectId,
-                receiveForm.WorkerType,
-                receiveForm.WorkerTeam,
-                receiveForm.Department,
-                receiveForm.PayAmount,
-                receiveForm.PayType,
-                receiveForm.Id,
-                receiveForm.IsChecked,
-                receiveForm.ReceiveItem
-            };
+        public Task<IReadOnlyList<Department>> GetDepartmentsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-            var id = await _dbConnection.QuerySingleAsync<int>(sql, parameters);
-            return id;
+        public Task<OrderForm> GetOrderAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OrderForm> GetOrderByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<PayBy>> GetPayByAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<PayType>> GetPayTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<WorkerTeam>> GetWorkerTeamsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<WorkerType>> GetWorkerTypesAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
