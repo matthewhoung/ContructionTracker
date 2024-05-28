@@ -1,6 +1,5 @@
 using Application.Configurations;
 using Infrastructure.Configurations;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 //dbConnection
@@ -9,10 +8,9 @@ builder.Services.AddMySQLConnection(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddDomainServices();
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    });
+    .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                        );
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,6 +26,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ResponseStandardizeMiddleware>();
+
+app.UseRouting();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
