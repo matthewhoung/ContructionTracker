@@ -13,5 +13,9 @@ namespace Application.Interfaces
         Task CreatePayByAsync(PayBy payBy);
         Task CreatePayTypeAsync(PayType payType);
         Task CreateUnitAsync(UnitClass unitClass);
+        Task CreateRolesAsync(Roles roles);
+        Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember);
+        Task<List<OrderForm>> GetAllOrderFormAsync();
+        Task<OrderForm> GetOrderFormAsync(int orderFormId);
     }
 }

@@ -51,5 +51,27 @@ namespace Application.Services
         {
             await _orderRepository.CreateUnitAsync(unitClass);
         }
+
+        public async Task CreateRolesAsync(Roles roles)
+        {
+            await _orderRepository.CreateRolesAsync(roles);
+        }
+
+        public async Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember)
+        {
+            await _orderRepository.CreateOrderFormCheckMember(orderFormCheckMember);
+        }
+
+        public async Task<List<OrderForm>> GetAllOrderFormAsync()
+        {
+            var orderForms = await _orderRepository.GetOrderAllAsync();
+            return orderForms.ToList();
+        }
+
+        public async Task<OrderForm> GetOrderFormAsync(int orderFormId)
+        {
+            var orderForm = await _orderRepository.GetOrderByIdAsync(orderFormId);
+            return orderForm;
+        }
     }
 }

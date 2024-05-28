@@ -70,5 +70,33 @@ namespace Presentation.Controllers
             await _orderServices.CreateUnitAsync(unitClass);
             return Ok(unitClass);
         }
+
+        [HttpPost("create/roles")]
+        public async Task<IActionResult> CreateRolesAsync(Roles roles)
+        {
+            await _orderServices.CreateRolesAsync(roles);
+            return Ok(roles);
+        }
+
+        [HttpPost("create/orderformcheckmember")]
+        public async Task<IActionResult> CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember)
+        {
+            await _orderServices.CreateOrderFormCheckMember(orderFormCheckMember);
+            return Ok(orderFormCheckMember);
+        }
+
+        [HttpGet("get/allorderform")]
+        public async Task<IActionResult> GetAllOrderFormAsync()
+        {
+            var orderForms = await _orderServices.GetAllOrderFormAsync();
+            return Ok(orderForms);
+        }
+
+        [HttpGet("get/orderform/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormAsync(int orderFormId)
+        {
+            var orderForm = await _orderServices.GetOrderFormAsync(orderFormId);
+            return Ok(orderForm);
+        }
     }
 }

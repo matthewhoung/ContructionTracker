@@ -14,9 +14,12 @@ namespace Application.Application
         Task CreateUnitAsync(UnitClass unitClass);
         Task CreatePayTypeAsync(PayType payType);
         Task CreatePayByAsync(PayBy payBy);
+        Task CreateRolesAsync(Roles roles);
+        Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember);
         //後期改成個別狀態下的列表
         Task<List<OrderForm>> GetOrderAllAsync();
-        Task<List<OrderForm>> GetOrderByIdAsync(int id);
+        Task<OrderForm> GetOrderByIdAsync(int orderFormId);
+        Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
         Task<IReadOnlyList<PayBy>> GetPayByAsync();
         Task<IReadOnlyList<PayType>> GetPayTypesAsync();
         Task<IReadOnlyList<WorkerTeam>> GetWorkerTeamsAsync();

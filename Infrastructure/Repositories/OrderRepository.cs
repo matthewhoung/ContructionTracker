@@ -19,7 +19,8 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                 INSERT INTO order_forms
-                    (project_id, 
+                    (creator_id,
+                    project_id, 
                     order_name,
                     order_description,
                     worker_type_id,
@@ -31,7 +32,8 @@ namespace Infrastructure.Repositories
                     created_at,
                     updated_at)
                 VALUES
-                    (@ProjectId,
+                    (@CreatorId,
+                    @ProjectId,
                     @OrderName,
                     @OrderDescription,
                     @WorkerTypeId,
@@ -49,8 +51,7 @@ namespace Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
-
-
+        
         public async Task CreateWorkerClassAsync(WorkerClass workerClass)
         {
            var writeCommand = @"
@@ -155,18 +156,35 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
+        public async Task CreateRolesAsync(Roles roles)
+        {
+            var writeCommand = @"
+                INSERT INTO roles
+                    (role_id, role_name)
+                VALUES
+                    (@RoleId, @RoleName)";
+            var parameters = new { RoleId = roles.RoleId, RoleName = roles.RoleName };
+            await _dbConnection.ExecuteAsync(writeCommand, parameters);
+        }
+
+        public async Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember)
+        {
+            var writeCommand = @"
+                INSERT INTO order_form_check_members
+                    (order_form_id, check_role_id, is_checked)
+                VALUES
+                    (@OrderFormId, @CheckMemberId, @isChecked)";
+            var parameters = new { OrderFormId = orderFormCheckMember.OrderFormId, CheckMemberId = orderFormCheckMember.OrderRoleId, isChecked = orderFormCheckMember.isChecked };
+            await _dbConnection.ExecuteAsync(writeCommand, parameters);
+        }
+
         public async Task<List<OrderForm>> GetOrderAllAsync()
         {
             var readCommand = @"
                     SELECT 
-                        id, 
+                        id,
+                        creator_id,
                         project_id, 
-                        creator_id, 
-                        creator_checked, 
-                        supervisor_id, 
-                        supervisor_checked, 
-                        director_id, 
-                        director_checked, 
                         order_name, 
                         order_description, 
                         worker_type_id, 
@@ -182,18 +200,13 @@ namespace Infrastructure.Repositories
             return orders.ToList();
         }
 
-        public async Task<List<OrderForm>> GetOrderByIdAsync(int id)
+        public async Task<OrderForm> GetOrderByIdAsync(int orderFormId)
         {
             var readCommand = @"
                     SELECT 
                         id, 
+                        creator_id,
                         project_id, 
-                        creator_id, 
-                        creator_checked, 
-                        supervisor_id, 
-                        supervisor_checked, 
-                        director_id, 
-                        director_checked, 
                         order_name, 
                         order_description, 
                         worker_type_id, 
@@ -206,9 +219,24 @@ namespace Infrastructure.Repositories
                         updated_at
                     FROM order_forms
                     WHERE id = @Id";
-            var parameters = new { Id = id };
-            var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
-            return orders.ToList();
+            var parameters = new { Id = orderFormId };
+            var orders = await _dbConnection.QuerySingleOrDefaultAsync<OrderForm>(readCommand, parameters);
+            return orders;
+        }
+
+        public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELET
+                        of.id, of.order_name,
+                        r.role_name,
+                        ofc.is_checked
+                    FROM order_forms of
+                    JOIN order_form_check ofc ON of.id = ofc.order_form_id
+                    JOIN roles r ON ofc.check_role_id = r.role_id
+                    WHERE of.id = @OrderFormId";
+            var getStatus = await _dbConnection.QueryAsync<OrderFormStatus>(readCommand, new { OrderFormId = orderFormId });
+            return getStatus.ToList();
         }
 
         public Task<IReadOnlyList<PayBy>> GetPayByAsync()
