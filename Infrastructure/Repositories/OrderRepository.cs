@@ -20,12 +20,6 @@ namespace Infrastructure.Repositories
             var writeCommand = @"
                 INSERT INTO order_forms
                     (project_id, 
-                    creator_id,
-                    creator_checked,
-                    supervisor_id,
-                    supervisor_checked,
-                    director_id,
-                    director_checked,
                     order_name,
                     order_description,
                     worker_type_id,
@@ -38,12 +32,6 @@ namespace Infrastructure.Repositories
                     updated_at)
                 VALUES
                     (@ProjectId,
-                    @CreatorId,
-                    @CreatorChecked,
-                    @SupervisorId,
-                    @SupervisorChecked,
-                    @DirectorId,
-                    @DirectorChecked,
                     @OrderName,
                     @OrderDescription,
                     @WorkerTypeId,
@@ -167,14 +155,60 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
-        public Task<OrderForm> GetOrderAllAsync()
+        public async Task<List<OrderForm>> GetOrderAllAsync()
         {
-            throw new NotImplementedException();
+            var readCommand = @"
+                    SELECT 
+                        id, 
+                        project_id, 
+                        creator_id, 
+                        creator_checked, 
+                        supervisor_id, 
+                        supervisor_checked, 
+                        director_id, 
+                        director_checked, 
+                        order_name, 
+                        order_description, 
+                        worker_type_id, 
+                        worker_team_id, 
+                        department_id, 
+                        pay_amount, 
+                        pay_type_id, 
+                        pay_by_id, 
+                        created_at, 
+                        updated_at
+                    FROM order_forms";
+            var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand);
+            return orders.ToList();
         }
 
-        public Task<OrderForm> GetOrderByIdAsync(int id)
+        public async Task<List<OrderForm>> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var readCommand = @"
+                    SELECT 
+                        id, 
+                        project_id, 
+                        creator_id, 
+                        creator_checked, 
+                        supervisor_id, 
+                        supervisor_checked, 
+                        director_id, 
+                        director_checked, 
+                        order_name, 
+                        order_description, 
+                        worker_type_id, 
+                        worker_team_id, 
+                        department_id, 
+                        pay_amount, 
+                        pay_type_id, 
+                        pay_by_id, 
+                        created_at, 
+                        updated_at
+                    FROM order_forms
+                    WHERE id = @Id";
+            var parameters = new { Id = id };
+            var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
+            return orders.ToList();
         }
 
         public Task<IReadOnlyList<PayBy>> GetPayByAsync()
@@ -193,6 +227,11 @@ namespace Infrastructure.Repositories
         }
 
         public Task<IReadOnlyList<WorkerType>> GetWorkerTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<WorkerClass>> GetWorkerClassesAsync()
         {
             throw new NotImplementedException();
         }

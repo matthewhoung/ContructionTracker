@@ -14,11 +14,13 @@ namespace Application.Application
         Task CreateUnitAsync(UnitClass unitClass);
         Task CreatePayTypeAsync(PayType payType);
         Task CreatePayByAsync(PayBy payBy);
-        Task<OrderForm> GetOrderAllAsync();
-        Task<OrderForm> GetOrderByIdAsync(int id);
+        //後期改成個別狀態下的列表
+        Task<List<OrderForm>> GetOrderAllAsync();
+        Task<List<OrderForm>> GetOrderByIdAsync(int id);
         Task<IReadOnlyList<PayBy>> GetPayByAsync();
         Task<IReadOnlyList<PayType>> GetPayTypesAsync();
         Task<IReadOnlyList<WorkerTeam>> GetWorkerTeamsAsync();
         Task<IReadOnlyList<WorkerType>> GetWorkerTypesAsync();
+        Task<IReadOnlyList<WorkerClass>> GetWorkerClassesAsync();
     }
 }
