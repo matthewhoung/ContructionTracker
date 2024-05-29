@@ -98,5 +98,12 @@ namespace Presentation.Controllers
             var orderForm = await _orderServices.GetOrderFormAsync(orderFormId);
             return Ok(orderForm);
         }
+
+        [HttpGet("get/orderformstatus/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormStatusAsync(int orderFormId)
+        {
+            var orderFormStatus = await _orderServices.GetOrderFormStatusAsync(orderFormId);
+            return Ok(orderFormStatus);
+        }
     }
 }

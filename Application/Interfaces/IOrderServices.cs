@@ -17,5 +17,6 @@ namespace Application.Interfaces
         Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember);
         Task<List<OrderForm>> GetAllOrderFormAsync();
         Task<OrderForm> GetOrderFormAsync(int orderFormId);
+        Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
     }
 }

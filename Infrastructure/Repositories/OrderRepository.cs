@@ -160,17 +160,17 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                 INSERT INTO roles
-                    (role_id, role_name)
+                    (role_name)
                 VALUES
-                    (@RoleId, @RoleName)";
-            var parameters = new { RoleId = roles.RoleId, RoleName = roles.RoleName };
+                    (@RoleName)";
+            var parameters = new {RoleName = roles.RoleName };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
         public async Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember)
         {
             var writeCommand = @"
-                INSERT INTO order_form_check_members
+                INSERT INTO order_form_checks
                     (order_form_id, check_role_id, is_checked)
                 VALUES
                     (@OrderFormId, @CheckMemberId, @isChecked)";
@@ -182,19 +182,19 @@ namespace Infrastructure.Repositories
         {
             var readCommand = @"
                     SELECT 
-                        id,
-                        creator_id,
-                        project_id, 
-                        order_name, 
-                        order_description, 
-                        worker_type_id, 
-                        worker_team_id, 
-                        department_id, 
-                        pay_amount, 
-                        pay_type_id, 
-                        pay_by_id, 
-                        created_at, 
-                        updated_at
+                        id AS Id,
+                        creator_id AS CreatorId,
+                        project_id AS ProjectId, 
+                        order_name AS OrderName, 
+                        order_description AS OrderDescription, 
+                        worker_type_id AS WorkerTypeId, 
+                        worker_team_id AS WorkerTeamId, 
+                        department_id AS DepartmentId, 
+                        pay_amount AS PayAmount, 
+                        pay_type_id AS PayTypeId, 
+                        pay_by_id AS PayById, 
+                        created_at AS CreatedAt, 
+                        updated_at AS UpdatedAt
                     FROM order_forms";
             var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand);
             return orders.ToList();
@@ -204,19 +204,19 @@ namespace Infrastructure.Repositories
         {
             var readCommand = @"
                     SELECT 
-                        id, 
-                        creator_id,
-                        project_id, 
-                        order_name, 
-                        order_description, 
-                        worker_type_id, 
-                        worker_team_id, 
-                        department_id, 
-                        pay_amount, 
-                        pay_type_id, 
-                        pay_by_id, 
-                        created_at, 
-                        updated_at
+                        id AS Id,
+                        creator_id AS CreatorId,
+                        project_id AS ProjectId, 
+                        order_name AS OrderName, 
+                        order_description AS OrderDescription, 
+                        worker_type_id AS WorkerTypeId, 
+                        worker_team_id AS WorkerTeamId, 
+                        department_id AS DepartmentId, 
+                        pay_amount AS PayAmount, 
+                        pay_type_id AS PayTypeId, 
+                        pay_by_id AS PayById, 
+                        created_at AS CreatedAt, 
+                        updated_at AS UpdatedAt
                     FROM order_forms
                     WHERE id = @Id";
             var parameters = new { Id = orderFormId };
@@ -227,14 +227,16 @@ namespace Infrastructure.Repositories
         public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
         {
             var readCommand = @"
-                    SELET
-                        of.id, of.order_name,
-                        r.role_name,
-                        ofc.is_checked
-                    FROM order_forms of
-                    JOIN order_form_check ofc ON of.id = ofc.order_form_id
-                    JOIN roles r ON ofc.check_role_id = r.role_id
-                    WHERE of.id = @OrderFormId";
+                    SELECT
+                        o.id,
+                        o.order_name,
+                        r.role_name AS RoleName,
+                        oc.user_id AS UserId,
+                        oc.is_checked AS isChecked
+                    FROM order_forms o
+                    JOIN order_form_checks oc ON o.id = oc.order_form_id
+                    JOIN roles r ON oc.check_role_id = r.role_id
+                    WHERE o.id = @OrderFormId;";
             var getStatus = await _dbConnection.QueryAsync<OrderFormStatus>(readCommand, new { OrderFormId = orderFormId });
             return getStatus.ToList();
         }

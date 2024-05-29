@@ -73,5 +73,10 @@ namespace Application.Services
             var orderForm = await _orderRepository.GetOrderByIdAsync(orderFormId);
             return orderForm;
         }
+        public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
+        {
+            var orderFormStatus = await _orderRepository.GetOrderFormStatusAsync(orderFormId);
+            return orderFormStatus.ToList();
+        }
     }
 }
