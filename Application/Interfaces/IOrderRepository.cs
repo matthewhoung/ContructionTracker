@@ -26,6 +26,7 @@ namespace Application.Application
         Task<IReadOnlyList<PayType>> GetPayTypesAsync();
         /*
          * 根據採購單取得細項的total_price
+         * 開發驗收單
          */
     }
 }

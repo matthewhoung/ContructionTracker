@@ -29,21 +29,21 @@ namespace Presentation.Controllers
             return Ok(createdOrderDetail);
         }
 
-        [HttpPost("create/payinfo")]
+        [HttpPost("create/form/payinfo")]
         public async Task<IActionResult> CreateOrderPayInfo(OrderFormPayInfo paymentInfo)
         {
             var createdPaymentInfo = await _orderServices.CreateOrderPayInfo(paymentInfo);
             return Ok(createdPaymentInfo);
         }
 
-        [HttpPost("create/checklist")]
+        [HttpPost("create/form/checklist")]
         public async Task<IActionResult> CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember)
         {
             await _orderServices.CreateOrderFormCheckList(orderFormCheckMember);
             return Ok(orderFormCheckMember);
         }
 
-        [HttpPost("create/workerlist")]
+        [HttpPost("create/form/workerlist")]
         public async Task<IActionResult> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
         {
             var createdWorkerList = await _orderServices.CreateOrderFormWorkerList(workerList);
@@ -63,20 +63,20 @@ namespace Presentation.Controllers
             var orderForm = await _orderServices.GetOrderFormAsync(orderFormId);
             return Ok(orderForm);
         }
-        [HttpGet("get/orderformpayinfo/{orderFormId}")]
+        [HttpGet("get/orderform/payinfo/{orderFormId}")]
         public async Task<IActionResult> GetOrderFormPayInfoAsync(int orderFormId)
         {
             var orderFormPayInfo = await _orderServices.GetOrderFormPayInfoAsync(orderFormId);
             return Ok(orderFormPayInfo);
         }
 
-        [HttpGet("get/orderformstatus/{orderFormId}")]
+        [HttpGet("get/orderform/status/{orderFormId}")]
         public async Task<IActionResult> GetOrderFormStatusAsync(int orderFormId)
         {
             var orderFormStatus = await _orderServices.GetOrderFormStatusAsync(orderFormId);
             return Ok(orderFormStatus);
         }
-        [HttpGet("get/orderformworker/{orderFormId}")]
+        [HttpGet("get/orderform/worker/{orderFormId}")]
         public async Task<IActionResult> GetOrderFormWorkerAsync(int orderFormId)
         {
             var orderFormWorkers = await _orderServices.GetOrderFormWorkerAsync(orderFormId);
