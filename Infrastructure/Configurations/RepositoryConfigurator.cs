@@ -1,4 +1,5 @@
 ﻿using Application.Application;
+using Application.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace Infrastructure.Configurations
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IGenericRepository , GenericRepository>();
             
             return services;
         }

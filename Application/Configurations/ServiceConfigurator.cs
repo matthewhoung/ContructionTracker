@@ -9,6 +9,7 @@ namespace Application.Configurations
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
             services.AddScoped<IOrderServices, OrderService>();
+            services.AddScoped<IGenericService, GenericService>();
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.Forms
+﻿namespace Core.Entities.Forms.Orders
 {
     public class OrderForm
     {

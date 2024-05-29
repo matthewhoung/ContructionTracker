@@ -1,6 +1,6 @@
 ﻿using Application.Application;
 using Application.Interfaces;
-using Core.Entities.Forms;
+using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
 
 namespace Application.Services
@@ -18,48 +18,9 @@ namespace Application.Services
             return await _orderRepository.CreateOrderAsync(orderForm);
         }
 
-        public async Task CreateWorkerClassListAsync(WorkerClass workerClass)
+        public async Task CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember)
         {
-            await _orderRepository.CreateWorkerClassAsync(workerClass);
-        }
-
-        public async Task CreateWorkerTeamListAsync(WorkerTeam workerTeam)
-        {
-            await _orderRepository.CreateWorkerTeamAsync(workerTeam);
-        }
-
-        public async Task CreateWorkerTypeListAsync(WorkerType workerType)
-        {
-            await _orderRepository.CreateWorkerTypeAsync(workerType);
-        }
-        public async Task CreateDepartmentAsync(Department department)
-        {
-            await _orderRepository.CreateDepartmentAsync(department);
-        }
-
-        public async Task CreatePayByAsync(PayBy payBy)
-        {
-            await _orderRepository.CreatePayByAsync(payBy);
-        }
-
-        public async Task CreatePayTypeAsync(PayType payType)
-        {
-            await _orderRepository.CreatePayTypeAsync(payType);
-        }
-
-        public async Task CreateUnitAsync(UnitClass unitClass)
-        {
-            await _orderRepository.CreateUnitAsync(unitClass);
-        }
-
-        public async Task CreateRolesAsync(Roles roles)
-        {
-            await _orderRepository.CreateRolesAsync(roles);
-        }
-
-        public async Task CreateOrderFormCheckMember(OrderFormCheckMember orderFormCheckMember)
-        {
-            await _orderRepository.CreateOrderFormCheckMember(orderFormCheckMember);
+            await _orderRepository.CreateOrderFormCheckList(orderFormCheckMember);
         }
 
         public async Task<List<OrderForm>> GetAllOrderFormAsync()
