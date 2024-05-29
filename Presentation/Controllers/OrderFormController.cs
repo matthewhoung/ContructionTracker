@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Core.Entities.Forms;
 using Core.Entities.Forms.Orders;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,19 @@ namespace Presentation.Controllers
         {
             var createdOrderForm = await _orderServices.CreateOrderFormAsync(orderForm);
             return Ok(createdOrderForm);
+        }
+        [HttpPost("create/form/detail")]
+        public async Task<IActionResult> CreateOrderFormDetailAsync(OrderItems orderItems)
+        {
+            var createdOrderDetail = await _orderServices.CreatOrderFormDetailAsync(orderItems);
+            return Ok(createdOrderDetail);
+        }
+
+        [HttpPost("create/payinfo")]
+        public async Task<IActionResult> CreateOrderPayInfo(OrderFormPayInfo paymentInfo)
+        {
+            var createdPaymentInfo = await _orderServices.CreateOrderPayInfo(paymentInfo);
+            return Ok(createdPaymentInfo);
         }
 
         [HttpPost("create/checklist")]
@@ -48,6 +62,12 @@ namespace Presentation.Controllers
         {
             var orderForm = await _orderServices.GetOrderFormAsync(orderFormId);
             return Ok(orderForm);
+        }
+        [HttpGet("get/orderformpayinfo/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormPayInfoAsync(int orderFormId)
+        {
+            var orderFormPayInfo = await _orderServices.GetOrderFormPayInfoAsync(orderFormId);
+            return Ok(orderFormPayInfo);
         }
 
         [HttpGet("get/orderformstatus/{orderFormId}")]

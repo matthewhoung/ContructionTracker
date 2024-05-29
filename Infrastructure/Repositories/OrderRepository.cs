@@ -20,43 +20,60 @@ namespace Infrastructure.Repositories
         public async Task<int> CreateOrderAsync(OrderForm order)
         {
             var writeCommand = @"
-                INSERT INTO orderforms
-                    (creator_id,
-                    project_id, 
-                    order_name,
-                    order_description,
-                    department_id,
-                    pay_amount,
-                    pay_type_id,
-                    pay_by_id,
-                    created_at,
-                    updated_at)
-                VALUES
-                    (@CreatorId,
-                    @ProjectId,
-                    @OrderName,
-                    @OrderDescription,
-                    @DepartmentId,
-                    @PayAmount,
-                    @PayTypeId,
-                    @PayById,
-                    @CreatedAt,
-                    @UpdatedAt);
-                SELECT LAST_INSERT_ID();";
+                    INSERT INTO orderforms
+                        (creator_id,
+                        project_id, 
+                        order_name,
+                        order_description,
+                        department_id,
+                        pay_amount,
+                        pay_type_id,
+                        pay_by_id,
+                        created_at,
+                        updated_at)
+                    VALUES
+                        (@CreatorId,
+                        @ProjectId,
+                        @OrderName,
+                        @OrderDescription,
+                        @DepartmentId,
+                        @PayAmount,
+                        @PayTypeId,
+                        @PayById,
+                        @CreatedAt,
+                        @UpdatedAt);
+                    SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, order);
         }
-        public Task<int> CreatOrderItemAsync(OrderItems orderItems)
+        public async Task<int> CreatOrderDetailAsync(OrderItems orderItems)
         {
-            throw new NotImplementedException();
+            var writeCommand = @"
+                        INSERT INTO orderforms_details
+                            (detail_id, orderform_id, item_name,item_description, quantity,unit_price ,unit_id , total_price, item_ischeck)
+                        VALUES
+                            (@DetailId, @OrderItemId, @ItemName, @ItemDescription, @Quantity, @UnitPrice, @UnitNameId, @TotalPrice, @IsChecked);
+                        SELECT LAST_INSERT_ID();";
+            return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, orderItems);
+        }
+
+        public async Task<int> CreateOrderPayInfo(OrderFormPayInfo paymentInfo)
+        {
+            var writeCommand = @"
+                    INSERT INTO orderforms_payinfo
+                        (orderform_id, pay_amount, pay_type_id, pay_by_id)
+                    VALUES
+                        (@OrderFormId, @PaymentAmount, @PaymentTypeId, @PaymentById);
+                    SELECT LAST_INSERT_ID();";
+            return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, paymentInfo);
         }
         
         public async Task CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember)
         {
             var writeCommand = @"
-                INSERT INTO orderforms_checklist
-                    (order_form_id, check_role_id,user_id, is_checked)
-                VALUES
-                    (@OrderFormId, @CheckMemberId,@UserId, @isChecked)";
+                    INSERT INTO orderforms_checklist
+                        (order_form_id, check_role_id,user_id, is_checked)
+                    VALUES
+                        (@OrderFormId, @CheckMemberId,@UserId, @isChecked)";
             var parameters = new { OrderFormId = orderFormCheckMember.OrderFormId, CheckMemberId = orderFormCheckMember.OrderRoleId, isChecked = orderFormCheckMember.isChecked };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
@@ -64,11 +81,11 @@ namespace Infrastructure.Repositories
         public async Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
         {
             var writeCommand = @"
-                INSERT INTO orderforms_workers
-                    (orderform_id, worker_type_id, worker_team_id)
-                VALUES
-                    (@OrderFormId, @WorkerTypeId, @WorkerTeamId);
-                SELECT LAST_INSERT_ID();";
+                    INSERT INTO orderforms_workers
+                        (orderform_id, worker_type_id, worker_team_id)
+                    VALUES
+                        (@OrderFormId, @WorkerTypeId, @WorkerTeamId);
+                    SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, workerList);
         }
 
@@ -135,31 +152,53 @@ namespace Infrastructure.Repositories
             return getStatus.ToList();
         }
 
+        public async Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELECT 
+                        o.id AS Id,
+                        o.creator_id AS CreatorId,
+                        o.project_id AS ProjectId,
+                        o.order_name AS OrderName,
+                        o.order_description AS OrderDescription,
+                        o.department_id AS DepartmentId,
+                        o.created_at AS CreatedAt,
+                        o.updated_at AS UpdatedAt,
+                        p.pay_amount AS PayAmount,
+                        p.pay_type_id AS PayTypeId,
+                        p.pay_by_id AS PayById
+                    FROM orderforms o
+                    JOIN orderforms_payinfo p ON o.id = p.orderform_id
+                    WHERE o.id = @OrderFormId";
+            var parameters = new { OrderFormId = orderFormId };
+            var orderFormPayInfo = await _dbConnection.QuerySingleOrDefaultAsync<OrderFormPaymentDto>(readCommand, parameters);
+            return orderFormPayInfo;
+        }
+
         public async Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId)
         {
             var query = @"
-                SELECT 
-                    o.id AS OrderId,
-                    o.creator_id AS CreatorId,
-                    o.project_id AS ProjectId,
-                    o.order_name AS OrderName,
-                    o.order_description AS OrderDescription,
-                    o.department_id AS DepartmentId,
-                    o.pay_amount AS PayAmount,
-                    o.pay_type_id AS PayTypeId,
-                    o.pay_by_id AS PayById,
-                    o.created_at AS CreatedAt,
-                    o.updated_at AS UpdatedAt,
-                    ow.worker_type_id AS WorkerTypeId,
-                    wt.worker_type_name AS WorkerTypeName,
-                    ow.worker_team_id AS WorkerTeamId,
-                    wtm.worker_team_name AS WorkerTeamName
-                FROM orderforms o
-                JOIN orderforms_workers ow ON o.id = ow.orderform_id
-                JOIN worker_types wt ON ow.worker_type_id = wt.worker_type_id
-                JOIN worker_teams wtm ON ow.worker_team_id = wtm.worker_team_id
-                WHERE o.id = @OrderFormId";
-
+                    SELECT 
+                        o.id AS OrderId,
+                        o.creator_id AS CreatorId,
+                        o.project_id AS ProjectId,
+                        o.order_name AS OrderName,
+                        o.order_description AS OrderDescription,
+                        o.department_id AS DepartmentId,
+                        o.pay_amount AS PayAmount,
+                        o.pay_type_id AS PayTypeId,
+                        o.pay_by_id AS PayById,
+                        o.created_at AS CreatedAt,
+                        o.updated_at AS UpdatedAt,
+                        ow.worker_type_id AS WorkerTypeId,
+                        wt.worker_type_name AS WorkerTypeName,
+                        ow.worker_team_id AS WorkerTeamId,
+                        wtm.worker_team_name AS WorkerTeamName
+                    FROM orderforms o
+                    JOIN orderforms_workers ow ON o.id = ow.orderform_id
+                    JOIN worker_types wt ON ow.worker_type_id = wt.worker_type_id
+                    JOIN worker_teams wtm ON ow.worker_team_id = wtm.worker_team_id
+                    WHERE o.id = @OrderFormId";
             var parameters = new { OrderFormId = orderFormId };
             var orderFormWithWorkers = await _dbConnection.QueryAsync<OrderFormWorkers>(query, parameters);
             return orderFormWithWorkers.ToList();

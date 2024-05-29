@@ -1,9 +1,8 @@
-﻿using Core.Entities.Settings;
-
-namespace Core.Entities.Forms
+﻿namespace Core.Entities.Forms
 {
     public class OrderItems
     {
+        public int DetailId { get; set; }
         public int OrderItemId { get; set; }
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }
