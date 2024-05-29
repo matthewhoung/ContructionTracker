@@ -1,4 +1,5 @@
 ﻿using Application.Application;
+using Application.DTOs;
 using Core.Entities.Forms;
 using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
@@ -24,8 +25,6 @@ namespace Infrastructure.Repositories
                     project_id, 
                     order_name,
                     order_description,
-                    worker_type_id,
-                    worker_team_id,
                     department_id,
                     pay_amount,
                     pay_type_id,
@@ -37,8 +36,6 @@ namespace Infrastructure.Repositories
                     @ProjectId,
                     @OrderName,
                     @OrderDescription,
-                    @WorkerTypeId,
-                    @WorkerTeamId,
                     @DepartmentId,
                     @PayAmount,
                     @PayTypeId,
@@ -62,6 +59,17 @@ namespace Infrastructure.Repositories
                     (@OrderFormId, @CheckMemberId,@UserId, @isChecked)";
             var parameters = new { OrderFormId = orderFormCheckMember.OrderFormId, CheckMemberId = orderFormCheckMember.OrderRoleId, isChecked = orderFormCheckMember.isChecked };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
+        }
+
+        public async Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
+        {
+            var writeCommand = @"
+                INSERT INTO orderforms_workers
+                    (orderform_id, worker_type_id, worker_team_id)
+                VALUES
+                    (@OrderFormId, @WorkerTypeId, @WorkerTeamId);
+                SELECT LAST_INSERT_ID();";
+            return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, workerList);
         }
 
         public async Task<List<OrderForm>> GetOrderAllAsync()
@@ -90,7 +98,7 @@ namespace Infrastructure.Repositories
         {
             var readCommand = @"
                     SELECT 
-                        id AS Id,
+                        id AS OrderId,
                         creator_id AS CreatorId,
                         project_id AS ProjectId, 
                         order_name AS OrderName, 
@@ -127,27 +135,41 @@ namespace Infrastructure.Repositories
             return getStatus.ToList();
         }
 
+        public async Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId)
+        {
+            var query = @"
+                SELECT 
+                    o.id AS OrderId,
+                    o.creator_id AS CreatorId,
+                    o.project_id AS ProjectId,
+                    o.order_name AS OrderName,
+                    o.order_description AS OrderDescription,
+                    o.department_id AS DepartmentId,
+                    o.pay_amount AS PayAmount,
+                    o.pay_type_id AS PayTypeId,
+                    o.pay_by_id AS PayById,
+                    o.created_at AS CreatedAt,
+                    o.updated_at AS UpdatedAt,
+                    ow.worker_type_id AS WorkerTypeId,
+                    wt.worker_type_name AS WorkerTypeName,
+                    ow.worker_team_id AS WorkerTeamId,
+                    wtm.worker_team_name AS WorkerTeamName
+                FROM orderforms o
+                JOIN orderforms_workers ow ON o.id = ow.orderform_id
+                JOIN worker_types wt ON ow.worker_type_id = wt.worker_type_id
+                JOIN worker_teams wtm ON ow.worker_team_id = wtm.worker_team_id
+                WHERE o.id = @OrderFormId";
+
+            var parameters = new { OrderFormId = orderFormId };
+            var orderFormWithWorkers = await _dbConnection.QueryAsync<OrderFormWorkers>(query, parameters);
+            return orderFormWithWorkers.ToList();
+        }
         public Task<IReadOnlyList<PayBy>> GetPayByAsync()
         {
             throw new NotImplementedException();
         }
 
         public Task<IReadOnlyList<PayType>> GetPayTypesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<WorkerTeam>> GetWorkerTeamsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<WorkerType>> GetWorkerTypesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<WorkerClass>> GetWorkerClassesAsync()
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs;
+using Application.Interfaces;
 using Core.Entities.Forms.Orders;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,13 @@ namespace Presentation.Controllers
             return Ok(orderFormCheckMember);
         }
 
+        [HttpPost("create/workerlist")]
+        public async Task<IActionResult> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
+        {
+            var createdWorkerList = await _orderServices.CreateOrderFormWorkerList(workerList);
+            return Ok(createdWorkerList);
+        }
+
         [HttpGet("get/allorderform")]
         public async Task<IActionResult> GetAllOrderFormAsync()
         {
@@ -47,6 +55,12 @@ namespace Presentation.Controllers
         {
             var orderFormStatus = await _orderServices.GetOrderFormStatusAsync(orderFormId);
             return Ok(orderFormStatus);
+        }
+        [HttpGet("get/orderformworker/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormWorkerAsync(int orderFormId)
+        {
+            var orderFormWorkers = await _orderServices.GetOrderFormWorkerAsync(orderFormId);
+            return Ok(orderFormWorkers);
         }
     }
 }

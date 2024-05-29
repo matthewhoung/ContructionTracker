@@ -6,6 +6,11 @@ namespace Application.Services
     public class GenericService : IGenericService
     {
         private readonly IGenericRepository _genericRepository;
+        
+        public GenericService(IGenericRepository genericRepository)
+        {
+            _genericRepository = genericRepository;
+        }
 
         public async Task CreateWorkerClassListAsync(WorkerClass workerClass)
         {

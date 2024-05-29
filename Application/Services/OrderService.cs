@@ -1,4 +1,5 @@
 ﻿using Application.Application;
+using Application.DTOs;
 using Application.Interfaces;
 using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
@@ -23,6 +24,11 @@ namespace Application.Services
             await _orderRepository.CreateOrderFormCheckList(orderFormCheckMember);
         }
 
+        public async Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
+        {
+            return await _orderRepository.CreateOrderFormWorkerList(workerList);
+        }
+
         public async Task<List<OrderForm>> GetAllOrderFormAsync()
         {
             var orderForms = await _orderRepository.GetOrderAllAsync();
@@ -38,6 +44,12 @@ namespace Application.Services
         {
             var orderFormStatus = await _orderRepository.GetOrderFormStatusAsync(orderFormId);
             return orderFormStatus.ToList();
+        }
+
+        public async Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId)
+        {
+            var orderFormWorkers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
+            return orderFormWorkers.ToList();
         }
     }
 }

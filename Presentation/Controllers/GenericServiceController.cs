@@ -10,6 +10,11 @@ namespace Presentation.Controllers
     {
         private readonly IGenericService _genericService;
 
+        public GenericServiceController(IGenericService genericService)
+        {
+            _genericService = genericService;
+        }
+
         [HttpPost("create/workerclass")]
         public async Task<IActionResult> CreateWorkerClassListAsync(WorkerClass workerClass)
         {
