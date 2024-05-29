@@ -98,12 +98,7 @@ namespace Infrastructure.Repositories
                         project_id AS ProjectId, 
                         order_name AS OrderName, 
                         order_description AS OrderDescription, 
-                        worker_type_id AS WorkerTypeId, 
-                        worker_team_id AS WorkerTeamId, 
                         department_id AS DepartmentId, 
-                        pay_amount AS PayAmount, 
-                        pay_type_id AS PayTypeId, 
-                        pay_by_id AS PayById, 
                         created_at AS CreatedAt, 
                         updated_at AS UpdatedAt
                     FROM orderforms";
@@ -115,17 +110,12 @@ namespace Infrastructure.Repositories
         {
             var readCommand = @"
                     SELECT 
-                        id AS OrderId,
+                        id AS Id,
                         creator_id AS CreatorId,
                         project_id AS ProjectId, 
                         order_name AS OrderName, 
                         order_description AS OrderDescription, 
-                        worker_type_id AS WorkerTypeId, 
-                        worker_team_id AS WorkerTeamId, 
                         department_id AS DepartmentId, 
-                        pay_amount AS PayAmount, 
-                        pay_type_id AS PayTypeId, 
-                        pay_by_id AS PayById, 
                         created_at AS CreatedAt, 
                         updated_at AS UpdatedAt
                     FROM orderforms
