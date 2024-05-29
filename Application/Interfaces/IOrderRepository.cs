@@ -5,6 +5,11 @@ using Core.Entities.Settings;
 
 namespace Application.Application
 {
+    //TODO:
+    /*
+     * 單據狀態(checklist => status => pending, processing, completed)
+     * 組裝採購單(Order + detail + workerlist + payinfo + status)
+     */
     public interface IOrderRepository
     {
         //write section
@@ -20,13 +25,5 @@ namespace Application.Application
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
         Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
-
-        //todo
-        Task<IReadOnlyList<PayBy>> GetPayByAsync();
-        Task<IReadOnlyList<PayType>> GetPayTypesAsync();
-        /*
-         * 根據採購單取得細項的total_price
-         * 開發驗收單
-         */
     }
 }

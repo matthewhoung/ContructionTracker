@@ -193,14 +193,5 @@ namespace Infrastructure.Repositories
             var orderFormWithWorkers = await _dbConnection.QueryAsync<OrderFormWorkers>(query, parameters);
             return orderFormWithWorkers.ToList();
         }
-        public Task<IReadOnlyList<PayBy>> GetPayByAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<PayType>> GetPayTypesAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
