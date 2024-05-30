@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Core.Entities.Settings;
+using Core.Entities.Settings.Generic;
 using Dapper;
 using System.Data;
 

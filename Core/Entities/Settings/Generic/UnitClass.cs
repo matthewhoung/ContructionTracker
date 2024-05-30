@@ -1,4 +1,4 @@
-﻿namespace Core.Entities.Settings
+﻿namespace Core.Entities.Settings.Generic
 {
     public class UnitClass
     {

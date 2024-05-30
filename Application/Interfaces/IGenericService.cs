@@ -1,4 +1,4 @@
-﻿using Core.Entities.Settings;
+﻿using Core.Entities.Settings.Generic;
 
 namespace Application.Interfaces
 {
