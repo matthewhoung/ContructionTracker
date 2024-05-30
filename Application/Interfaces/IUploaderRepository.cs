@@ -1,10 +1,10 @@
 ﻿using Core.Entities.Settings.Uploader;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces
 {
     public interface IUploaderRepository
     {
-        Task<int> CreateFilePathAsync(Uploader uploader);
-        Task UpdateFilePathAsync(UpdatePath updatePath);
+        Task<int> CreateFileUrlAsync(Uploader uploader, IFormFile file);
     }
 }

@@ -10,6 +10,7 @@ namespace Application.Configurations
         {
             services.AddScoped<IOrderServices, OrderService>();
             services.AddScoped<IGenericService, GenericService>();
+            services.AddScoped<IUploaderService, UploaderService>();
 
             return services;
         }

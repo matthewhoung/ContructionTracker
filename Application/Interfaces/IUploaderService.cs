@@ -1,9 +1,10 @@
 ﻿using Core.Entities.Settings.Uploader;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces
 {
     public interface IUploaderService
     {
-        Task UploadFileAsync(Uploader uploadInfo);
+        Task<int> UploadFileAsync(Uploader uploader, IFormFile file);
     }
 }

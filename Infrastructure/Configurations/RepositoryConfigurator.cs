@@ -12,6 +12,7 @@ namespace Infrastructure.Configurations
         {
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IGenericRepository , GenericRepository>();
+            services.AddScoped<IUploaderRepository, UploaderRepository>();
             
             return services;
         }
