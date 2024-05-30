@@ -77,7 +77,7 @@ namespace Infrastructure.Repositories
             string rootPath = _configuration["FileUploadPath"];
             DateTime now = DateTime.Now;
             string extension = Path.GetExtension(file.FileName);
-            string fileName = now.ToString("yyyy-MM-dd") + $"-{autoIncrement}";
+            string fileName = now.ToString("yyyy-MM-dd") + $"-{autoIncrement}" + extension;
             string filePath = Path.Combine(rootPath, orderFormId.ToString(),fileName);
 
             return filePath;
