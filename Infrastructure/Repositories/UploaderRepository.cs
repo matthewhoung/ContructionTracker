@@ -52,8 +52,8 @@ namespace Infrastructure.Repositories
                         UploaderId = uploader.UploaderId,
                         FileName = Path.GetFileName(fileFullPath),
                         FilePath = fileFullPath,
-                        CreateAt = uploader.CreateAt,
-                        UpdateAt = uploader.UpdateAt
+                        CreateAt = DateTime.UtcNow,
+                        UpdateAt = DateTime.UtcNow
                     };
                     var fileId = await _dbConnection.ExecuteScalarAsync<int>(writeCommand, parameters, transaction);
                     transaction.Commit();
