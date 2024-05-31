@@ -8,9 +8,7 @@
         public string Status { get; set; }
         public string OrderName { get; set; }
         public string OrderDescription { get; set; }
-        public int DepartmentId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
     }
 }

@@ -48,7 +48,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("create/form/workerlist")]
-        public async Task<IActionResult> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
+        public async Task<IActionResult> CreateOrderFormWorkerList(OrderFormWorker workerList)
         {
             var createdWorkerList = await _orderServices.CreateOrderFormWorkerList(workerList);
             return Ok(createdWorkerList);
@@ -152,7 +152,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("update/orderform/worker")]
-        public async Task<IActionResult> UpdateWorkerAsync(OrderFromWorkerDto workerList)
+        public async Task<IActionResult> UpdateWorkerAsync(OrderFormWorker workerList)
         {
             await _orderServices.UpdateWorkerAsync(workerList);
             return Ok();

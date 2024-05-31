@@ -11,7 +11,7 @@ namespace Application.Interfaces
         Task<int> CreateOrderFormAsync(OrderForm orderForm);
         Task<int> CreatOrderFormDetailAsync(OrderFormDetail orderItems);
         Task CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember);
-        Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList);
+        Task<int> CreateOrderFormWorkerList(OrderFormWorker workerList);
         Task<int> CreateOrderPayInfo(OrderFormPayInfo paymentInfo);
         Task<int> CreatOrderFormDepartmentAsync(OrderFormDepartment department);
 
@@ -20,10 +20,10 @@ namespace Application.Interfaces
         Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
         Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId);
         Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
-        Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
+        Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);
-        Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
-        Task<List<OrderFormDepartmentDto>> GetOrderFormDepartmentAsync(int orderFormId);
+        Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId);
+        Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
         Task<int> GetOrderFormStatus(int orderfromId);
 
@@ -31,7 +31,7 @@ namespace Application.Interfaces
 
         Task UpdateOrderDetailAsync(OrderFormDetail orderItems);
         Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
-        Task UpdateWorkerAsync(OrderFromWorkerDto workerList);
+        Task UpdateWorkerAsync(OrderFormWorker workerList);
         Task UpdateStatusAsync(int orderFormId);
         Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);
 

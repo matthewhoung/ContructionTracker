@@ -35,7 +35,7 @@ namespace Application.Services
             await _orderRepository.CreateOrderFormCheckList(orderFormCheckMember);
         }
 
-        public async Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList)
+        public async Task<int> CreateOrderFormWorkerList(OrderFormWorker workerList)
         {
             return await _orderRepository.CreateOrderFormWorkerList(workerList);
         }
@@ -109,7 +109,7 @@ namespace Application.Services
             return orderDetails;
         }
 
-        public async Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId)
+        public async Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId)
         {
             var orderFormPayInfo = await _orderRepository.GetOrderFormPayInfoAsync(orderFormId);
             return orderFormPayInfo;
@@ -121,7 +121,7 @@ namespace Application.Services
             return orderFormStatus;
         }
 
-        public async Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId)
+        public async Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId)
         {
             var orderFormWorkers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
             return orderFormWorkers;
@@ -138,7 +138,7 @@ namespace Application.Services
             return await _orderRepository.GetOrderFormStatus(orderfromId);
         }
 
-        public async Task<List<OrderFormDepartmentDto>> GetOrderFormDepartmentAsync(int orderFormId)
+        public async Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId)
         {
             var orderFormDepartments = await _orderRepository.GetOrderFormDepartmentAsync(orderFormId);
             return orderFormDepartments;
@@ -158,7 +158,7 @@ namespace Application.Services
             await _orderRepository.UpdateOrderFormPayInfoAsync(paymentInfo);
         }
 
-        public async Task UpdateWorkerAsync(OrderFromWorkerDto workerList)
+        public async Task UpdateWorkerAsync(OrderFormWorker workerList)
         {
             await _orderRepository.UpdateWorkerAsync(workerList);
         }

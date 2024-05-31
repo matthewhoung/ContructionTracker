@@ -16,9 +16,9 @@ namespace Application.DTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<OrderFormDetail> OrderItems { get; set; }
-        public List<OrderFormWorkers> Workers { get; set; }
-        public OrderFormPaymentDto PaymentInfo { get; set; }
-        public List<OrderFormDepartmentDto> Department { get; set; }
+        public List<OrderFormWorker> Workers { get; set; }
+        public OrderFormPayInfo PaymentInfo { get; set; }
+        public List<OrderFormDepartment> Department { get; set; }
         public List<OrderFormStatus> Signatures { get; set; }
         public List<FileUploaderPath> FilePaths { get; set; }
     }
