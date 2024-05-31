@@ -5,6 +5,8 @@ using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
 using Dapper;
 using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -16,7 +18,9 @@ namespace Infrastructure.Repositories
         {
             _dbConnection = dbConnection;
         }
-
+        /*
+         * Write Section
+         */
         public async Task<int> CreateOrderAsync(OrderForm order)
         {
             var writeCommand = @"
@@ -89,6 +93,10 @@ namespace Infrastructure.Repositories
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, workerList);
         }
 
+        /*
+         * Read Section
+         */
+
         public async Task<List<OrderForm>> GetOrderAllAsync()
         {
             var readCommand = @"
@@ -123,6 +131,26 @@ namespace Infrastructure.Repositories
             var parameters = new { Id = orderFormId };
             var orders = await _dbConnection.QuerySingleOrDefaultAsync<OrderForm>(readCommand, parameters);
             return orders;
+        }
+
+        public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELECT 
+                        detail_id AS DetailId,
+                        orderform_id AS OrderItemId,
+                        item_name AS ItemName,
+                        item_description AS ItemDescription,
+                        quantity AS Quantity,
+                        unit_price AS UnitPrice,
+                        unit_id AS UnitNameId,
+                        total_price AS TotalPrice,
+                        item_ischeck AS IsChecked
+                    FROM orderforms_details
+                    WHERE orderform_id = @OrderFormId";
+            var parameters = new { OrderFormId = orderFormId };
+            var orderDetails = await _dbConnection.QueryAsync<OrderItems>(readCommand, parameters);
+            return orderDetails.ToList();
         }
 
         public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
@@ -189,6 +217,61 @@ namespace Infrastructure.Repositories
             var parameters = new { OrderFormId = orderFormId };
             var orderFormWithWorkers = await _dbConnection.QueryAsync<OrderFormWorkers>(query, parameters);
             return orderFormWithWorkers.ToList();
+        }
+
+        public async Task<Dictionary<string, int>> GetOrderFormStatusCountAsync()
+        {
+            var readCommand = @"
+                    SELECT
+                        status,
+                        COUNT(*) AS Count
+                    FROM orderforms
+                    GROUP BY status";
+
+            var statusCounts = await _dbConnection.QueryAsync<(string Status, int Count)>(readCommand);
+
+            var result = statusCounts.ToDictionary(item => item.Status, item => item.Count);
+
+            return result;
+        }
+
+
+        /*
+         * Update Section
+         */
+
+        public async Task UpdateStatusAsync(int orderFormId)
+        {
+            var checklist = await GetOrderFormStatusAsync(orderFormId);
+
+            var allChecked = checklist.All(item => item.isChecked);
+            var creatorChecked = checklist.Any(item => item.RoleName == "Creator" && item.isChecked);
+
+            var status = allChecked ? "已審核" : (creatorChecked ? "審核中" : "編輯中");
+
+            var updateCommand = @"
+                    UPDATE orderforms
+                    SET status = @Status
+                    WHERE id = @OrderFormId";
+            var parameters = new { Status = status, OrderFormId = orderFormId };
+            await _dbConnection.ExecuteAsync(updateCommand, parameters);
+        }
+
+        public async Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        {
+            var updateCommand = @"
+                    UPDATE orderforms_checklist
+                    SET is_checked = @IsChecked
+                    WHERE order_form_id = @OrderFormId AND user_id = @UserId";
+            var parameters = new 
+            {
+                IsChecked = isChecked,
+                OrderFormId = orderFormId,
+                UserId = userId
+            };
+            await _dbConnection.ExecuteAsync(updateCommand, parameters);
+
+            await UpdateStatusAsync(orderFormId);
         }
     }
 }

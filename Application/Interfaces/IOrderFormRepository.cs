@@ -12,6 +12,7 @@ namespace Application.Application
      * 新增更新功能: 單據名稱、單據說明、細項、付款方式、工種廠商、簽核(退簽)
      *            : 單據狀態(checklist => status => pending, processing, completed)
      * 新增刪除功能: 細項
+     * 
      */
     public interface IOrderFormRepository
     {
@@ -25,8 +26,17 @@ namespace Application.Application
         //read section
         Task<List<OrderForm>> GetOrderAllAsync();
         Task<OrderForm> GetOrderByIdAsync(int orderFormId);
+        Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId);
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
         Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
+        Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
+
+        //update section
+
+        Task UpdateStatusAsync(int orderFormId);
+        Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked);
+
+        //delete section
     }
 }

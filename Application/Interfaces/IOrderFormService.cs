@@ -20,5 +20,11 @@ namespace Application.Interfaces
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
         Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
+        Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
+
+        //update section
+
+        Task UpdateStatusAsync(int orderFormId);
+        Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked);
     }
 }

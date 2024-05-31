@@ -16,6 +16,10 @@ namespace Presentation.Controllers
             _orderServices = orderServices;
         }
 
+        /*
+         * POST Section
+         */
+
         [HttpPost("create/form")]
         public async Task<IActionResult> CreateOrderFormAsync(OrderForm orderForm)
         {
@@ -50,6 +54,10 @@ namespace Presentation.Controllers
             return Ok(createdWorkerList);
         }
 
+        /*
+         * GET Section
+         */
+
         [HttpGet("get/allorderform")]
         public async Task<IActionResult> GetAllOrderFormAsync()
         {
@@ -81,6 +89,31 @@ namespace Presentation.Controllers
         {
             var orderFormWorkers = await _orderServices.GetOrderFormWorkerAsync(orderFormId);
             return Ok(orderFormWorkers);
+        }
+
+        [HttpGet("get/orderform/statuscount")]
+        public async Task<IActionResult> GetOrderFormStatusCountAsync()
+        {
+            var orderFormStatusCount = await _orderServices.GetOrderFormStatusCountAsync();
+            return Ok(orderFormStatusCount);
+        }
+
+        /*
+         * PUT Section
+         */
+
+        [HttpPut("update/status/{orderFormId}")]
+        public async Task<IActionResult> UpdateStatusAsync(int orderFormId)
+        {
+            await _orderServices.UpdateStatusAsync(orderFormId);
+            return Ok();
+        }
+
+        [HttpPut("update/ischecked/{orderFormId}/{userId}/{isChecked}")]
+        public async Task<IActionResult> UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        {
+            await _orderServices.UpdateIsCheckedAsync(orderFormId, userId, isChecked);
+            return Ok();
         }
     }
 }

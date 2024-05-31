@@ -15,6 +15,10 @@ namespace Application.Services
         {
             _orderRepository = orderRepository;
         }
+
+        /*
+         * Write Section
+         */
         public async Task<int> CreateOrderFormAsync(OrderForm orderForm)
         {
             return await _orderRepository.CreateOrderAsync(orderForm);
@@ -39,6 +43,9 @@ namespace Application.Services
             return _orderRepository.CreateOrderPayInfo(paymentInfo);
         }
 
+        /*
+         * Read Section
+         */
         public async Task<List<OrderForm>> GetAllOrderFormAsync()
         {
             var orderForms = await _orderRepository.GetOrderAllAsync();
@@ -67,6 +74,25 @@ namespace Application.Services
         {
             var orderFormWorkers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
             return orderFormWorkers.ToList();
+        }
+
+        public async Task<Dictionary<string, int>> GetOrderFormStatusCountAsync()
+        {
+            var orderFormStatusCount = await _orderRepository.GetOrderFormStatusCountAsync();
+            return orderFormStatusCount;
+        }
+
+        /*
+         * Update Section
+         */
+        public async Task UpdateStatusAsync(int orderFormId)
+        {
+            await _orderRepository.UpdateStatusAsync(orderFormId);
+        }
+
+        public async Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        {
+            await _orderRepository.UpdateIsCheckedAsync(orderFormId, userId, isChecked);
         }
     }
 }
