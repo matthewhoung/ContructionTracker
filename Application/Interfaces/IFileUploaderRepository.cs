@@ -6,5 +6,7 @@ namespace Application.Interfaces
     public interface IFileUploaderRepository
     {
         Task<int> CreateFileUrlAsync(FileUploader uploader, IFormFile file);
+        Task<List<FileUploaderPath>> GetFilePathAsync(int orderFormId);
+        Task<string> DeleteFilePathAsync(int fileId);
     }
 }

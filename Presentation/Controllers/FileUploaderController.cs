@@ -43,5 +43,35 @@ namespace Presentation.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet("file/{orderFormId}")]
+        public async Task<IActionResult> GetMeetingFiles(int orderFormId)
+        {
+            try
+            {
+                var files = await _uploaderService.GetFilePathAsync(orderFormId);
+
+                return Ok(files);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete("file/{fileId}")]
+        public async Task<IActionResult> DeleteMeetingFile(int fileId)
+        {
+            try
+            {
+                var filePath = await _uploaderService.DeleteFilePathAsync(fileId);
+
+                return Ok(filePath);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

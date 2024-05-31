@@ -68,6 +68,33 @@ namespace Infrastructure.Repositories
             }
         }
 
+        public async Task<List<FileUploaderPath>> GetFilePathAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELECT
+                        orderform_id AS OrderFormId,
+                        file_id AS FileId,
+                        file_name AS FileName,
+                        file_path AS FilePath,
+                        created_at AS CreatedAt
+                    FROM orderforms_filepaths
+                    WHERE orderform_id = @OrderFromId";
+            var parameters = new { OrderFromId = orderFormId };
+            var filePath = await _dbConnection.QueryAsync<FileUploaderPath>(readCommand, parameters);
+            return filePath.ToList();
+        }
+
+        public async Task<string> DeleteFilePathAsync(int fileId)
+        {
+            var query = @"
+                    DELETE FROM orderforms_filepaths
+                    OUTPUT DELETED.file_path
+                    WHERE file_id = @FileId";
+            var parameters = new { FileId = fileId };
+            var filePath = await _dbConnection.QuerySingleOrDefaultAsync<string>(query, parameters);
+            return filePath;
+        }
+
         private async Task<string> GenerateFilePath(int orderFormId, IFormFile file)
         {
             var currentMaxIncrement = await GetOrderFormMaxIncrement(orderFormId);
