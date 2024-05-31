@@ -5,8 +5,6 @@ using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
 using Dapper;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -30,9 +28,6 @@ namespace Infrastructure.Repositories
                         order_name,
                         order_description,
                         department_id,
-                        pay_amount,
-                        pay_type_id,
-                        pay_by_id,
                         created_at,
                         updated_at)
                     VALUES
@@ -41,9 +36,6 @@ namespace Infrastructure.Repositories
                         @OrderName,
                         @OrderDescription,
                         @DepartmentId,
-                        @PayAmount,
-                        @PayTypeId,
-                        @PayById,
                         @CreatedAt,
                         @UpdatedAt);
                     SELECT LAST_INSERT_ID();";
@@ -64,7 +56,7 @@ namespace Infrastructure.Repositories
                             item_ischeck)
                         VALUES
                             (@DetailId, 
-                            @OrderItemId, 
+                            @OrderFormId, 
                             @ItemName, 
                             @ItemDescription, 
                             @Quantity, 
@@ -169,18 +161,18 @@ namespace Infrastructure.Repositories
         public async Task<List<OrderForm>> GetOrderByUserAsync(int userId)
         {
             var readCommand = @"
-            SELECT 
-                id AS Id,
-                creator_id AS CreatorId,
-                project_id AS ProjectId, 
-                order_name AS OrderName,
-                status AS Status,
-                order_description AS OrderDescription, 
-                department_id AS DepartmentId, 
-                created_at AS CreatedAt, 
-                updated_at AS UpdatedAt
-            FROM orderforms
-            WHERE creator_id = @UserId";
+                    SELECT 
+                        id AS Id,
+                        creator_id AS CreatorId,
+                        project_id AS ProjectId, 
+                        order_name AS OrderName,
+                        status AS Status,
+                        order_description AS OrderDescription, 
+                        department_id AS DepartmentId, 
+                        created_at AS CreatedAt, 
+                        updated_at AS UpdatedAt
+                    FROM orderforms
+                    WHERE creator_id = @UserId";
             var parameters = new { UserId = userId };
             var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
             return orders.ToList();
@@ -192,7 +184,7 @@ namespace Infrastructure.Repositories
             var readCommand = @"
                     SELECT 
                         detail_id AS DetailId,
-                        orderform_id AS OrderItemId,
+                        orderform_id AS OrderFormId,
                         item_name AS ItemName,
                         item_description AS ItemDescription,
                         quantity AS Quantity,
@@ -304,6 +296,41 @@ namespace Infrastructure.Repositories
         /*
          * Update Section
          */
+        public async Task UpdateOrderDetailAsync(OrderItems orderItems)
+        {
+            var updateCommand = @"
+                    UPDATE orderforms_details
+                    SET item_name = @ItemName,
+                        item_description = @ItemDescription,
+                        quantity = @Quantity,
+                        unit_price = @UnitPrice,
+                        unit_id = @UnitNameId,
+                        total_price = @TotalPrice,
+                        item_ischeck = @IsChecked
+                    WHERE detail_id = @DetailId AND orderform_id = @OrderFormId";
+            await _dbConnection.ExecuteAsync(updateCommand, orderItems);
+        }
+
+        public async Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
+        {
+            var updateCommand = @"
+                    UPDATE orderforms_payinfo
+                    SET pay_amount = @PaymentAmount,
+                        pay_type_id = @PaymentTypeId,
+                        pay_by_id = @Payment
+                    WHERE orderform_id = @OrderFormId";
+            await _dbConnection.ExecuteAsync(updateCommand, paymentInfo);
+        }
+
+        public async Task UpdateWorkerAsync(OrderFromWorkerDto workerList)
+        {
+            var updateCommand = @"
+                    UPDATE orderforms_workers
+                    SET worker_type_id = @WorkerTypeId,
+                        worker_team_id = @WorkerTeamId
+                    WHERE orderform_id = @OrderFormId";
+            await _dbConnection.ExecuteAsync(updateCommand, workerList);
+        }
 
         public async Task UpdateStatusAsync(int orderFormId)
         {

@@ -27,6 +27,9 @@ namespace Application.Interfaces
 
         //Update Section
 
+        Task UpdateOrderDetailAsync(OrderItems orderItems);
+        Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
+        Task UpdateWorkerAsync(OrderFromWorkerDto workerList);
         Task UpdateStatusAsync(int orderFormId);
         Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);
 

@@ -9,9 +9,8 @@ namespace Application.Application
     /*
      * 新增取得功能: 
      * 新增創建功能: 
-     * 新增更新功能: 單據名稱、單據說明、付款方式、工種廠商、簽核(退簽)
+     * 新增更新功能: 
      * 新增刪除功能: 
-     * 
      */
     public interface IOrderFormRepository
     {
@@ -35,6 +34,9 @@ namespace Application.Application
 
         //Update Section
 
+        Task UpdateOrderDetailAsync(OrderItems orderItems);
+        Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
+        Task UpdateWorkerAsync(OrderFromWorkerDto workerList);
         Task UpdateStatusAsync(int orderFormId);
         Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);
 

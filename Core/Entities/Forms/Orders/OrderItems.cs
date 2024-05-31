@@ -3,7 +3,7 @@
     public class OrderItems
     {
         public int DetailId { get; set; }
-        public int OrderItemId { get; set; }
+        public int OrderFormId { get; set; }
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }
         public int Quantity { get; set; }

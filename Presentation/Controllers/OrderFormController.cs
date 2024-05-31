@@ -123,6 +123,26 @@ namespace Presentation.Controllers
         /*
          * PUT Section
          */
+        [HttpPut("update/orderform/detail")]
+        public async Task<IActionResult> UpdateOrderDetailAsync(OrderItems orderItems)
+        {
+            await _orderServices.UpdateOrderDetailAsync(orderItems);
+            return Ok();
+        }
+
+        [HttpPut("update/orderform/payinfo")]
+        public async Task<IActionResult> UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
+        {
+            await _orderServices.UpdateOrderFormPayInfoAsync(paymentInfo);
+            return Ok();
+        }
+
+        [HttpPut("update/orderform/worker")]
+        public async Task<IActionResult> UpdateWorkerAsync(OrderFromWorkerDto workerList)
+        {
+            await _orderServices.UpdateWorkerAsync(workerList);
+            return Ok();
+        }
 
         [HttpPut("update/status/{orderFormId}")]
         public async Task<IActionResult> UpdateStatusAsync(int orderFormId)

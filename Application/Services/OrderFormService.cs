@@ -10,10 +10,12 @@ namespace Application.Services
     public class OrderFormService : IOrderFormService
     {
         private readonly IOrderFormRepository _orderRepository;
+        private readonly IFileUploaderService _fileUploaderService;
 
-        public OrderFormService(IOrderFormRepository orderRepository)
+        public OrderFormService(IOrderFormRepository orderRepository, IFileUploaderService fileUploaderService)
         {
             _orderRepository = orderRepository;
+            _fileUploaderService = fileUploaderService;
         }
 
         /*
@@ -60,6 +62,7 @@ namespace Application.Services
             var orderItems = await _orderRepository.GetOrderDetailAsync(orderFormId);
             var workers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
             var payInfo = await _orderRepository.GetOrderFormPayInfoAsync(orderFormId);
+            var filepaths = await _fileUploaderService.GetFilePathAsync(orderFormId);
             var signatures = await _orderRepository.GetOrderFormSignitureAsync(orderFormId);
 
             var orderformInfo = new OrderFormInfoDto
@@ -74,6 +77,7 @@ namespace Application.Services
                 OrderItems = orderItems,
                 Workers = workers,
                 PaymentInfo = payInfo,
+                FilePaths = filepaths,
                 Signatures = signatures,
                 CreatedAt = orderForm.CreatedAt,
                 UpdatedAt = orderForm.UpdatedAt
@@ -131,6 +135,22 @@ namespace Application.Services
         /*
          * Update Section
          */
+
+        public async Task UpdateOrderDetailAsync(OrderItems orderItems)
+        {
+            await _orderRepository.UpdateOrderDetailAsync(orderItems);
+        }
+
+        public async Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
+        {
+            await _orderRepository.UpdateOrderFormPayInfoAsync(paymentInfo);
+        }
+
+        public async Task UpdateWorkerAsync(OrderFromWorkerDto workerList)
+        {
+            await _orderRepository.UpdateWorkerAsync(workerList);
+        }
+
         public async Task UpdateStatusAsync(int orderFormId)
         {
             await _orderRepository.UpdateStatusAsync(orderFormId);
