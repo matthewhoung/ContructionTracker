@@ -25,7 +25,7 @@ namespace Application.Services
         {
             return await _orderRepository.CreateOrderAsync(orderForm);
         }
-        public async Task<int> CreatOrderFormDetailAsync(OrderItems orderItems)
+        public async Task<int> CreatOrderFormDetailAsync(OrderFormDetail orderItems)
         {
             return await _orderRepository.CreatOrderDetailAsync(orderItems);
         }
@@ -45,13 +45,18 @@ namespace Application.Services
             return _orderRepository.CreateOrderPayInfo(paymentInfo);
         }
 
+        public async Task<int> CreatOrderFormDepartmentAsync(OrderFormDepartment department)
+        {
+            return await _orderRepository.CreatOrderFormDepartmentAsync(department);
+        }
+
         /*
          * Read Section
          */
         public async Task<List<OrderForm>> GetAllOrderFormAsync()
         {
             var orderForms = await _orderRepository.GetOrderAllAsync();
-            return orderForms.ToList();
+            return orderForms;
         }
 
         public async Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId)
@@ -62,6 +67,7 @@ namespace Application.Services
             var orderItems = await _orderRepository.GetOrderDetailAsync(orderFormId);
             var workers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
             var payInfo = await _orderRepository.GetOrderFormPayInfoAsync(orderFormId);
+            var department = await _orderRepository.GetOrderFormDepartmentAsync(orderFormId);
             var filepaths = await _fileUploaderService.GetFilePathAsync(orderFormId);
             var signatures = await _orderRepository.GetOrderFormSignitureAsync(orderFormId);
 
@@ -73,10 +79,10 @@ namespace Application.Services
                 OrderName = orderForm.OrderName,
                 OrderDescription = orderForm.OrderDescription,
                 Status = orderForm.Status,
-                DepartmentId = orderForm.DepartmentId,
                 OrderItems = orderItems,
                 Workers = workers,
                 PaymentInfo = payInfo,
+                Department = department,
                 FilePaths = filepaths,
                 Signatures = signatures,
                 CreatedAt = orderForm.CreatedAt,
@@ -97,10 +103,10 @@ namespace Application.Services
             return orderformInfos.Where(info => info != null).ToList();
         }
 
-        public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
+        public async Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId)
         {
             var orderDetails = await _orderRepository.GetOrderDetailAsync(orderFormId);
-            return orderDetails.ToList();
+            return orderDetails;
         }
 
         public async Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId)
@@ -112,13 +118,13 @@ namespace Application.Services
         public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
         {
             var orderFormStatus = await _orderRepository.GetOrderFormSignitureAsync(orderFormId);
-            return orderFormStatus.ToList();
+            return orderFormStatus;
         }
 
         public async Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId)
         {
             var orderFormWorkers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
-            return orderFormWorkers.ToList();
+            return orderFormWorkers;
         }
 
         public async Task<Dictionary<string, int>> GetOrderFormStatusCountAsync()
@@ -132,11 +138,17 @@ namespace Application.Services
             return await _orderRepository.GetOrderFormStatus(orderfromId);
         }
 
+        public async Task<List<OrderFormDepartmentDto>> GetOrderFormDepartmentAsync(int orderFormId)
+        {
+            var orderFormDepartments = await _orderRepository.GetOrderFormDepartmentAsync(orderFormId);
+            return orderFormDepartments;
+        }
+
         /*
          * Update Section
          */
 
-        public async Task UpdateOrderDetailAsync(OrderItems orderItems)
+        public async Task UpdateOrderDetailAsync(OrderFormDetail orderItems)
         {
             await _orderRepository.UpdateOrderDetailAsync(orderItems);
         }

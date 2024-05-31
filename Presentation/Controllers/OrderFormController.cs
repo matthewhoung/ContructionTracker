@@ -27,7 +27,7 @@ namespace Presentation.Controllers
             return Ok(createdOrderForm);
         }
         [HttpPost("create/form/detail")]
-        public async Task<IActionResult> CreateOrderFormDetailAsync(OrderItems orderItems)
+        public async Task<IActionResult> CreateOrderFormDetailAsync(OrderFormDetail orderItems)
         {
             var createdOrderDetail = await _orderServices.CreatOrderFormDetailAsync(orderItems);
             return Ok(createdOrderDetail);
@@ -52,6 +52,13 @@ namespace Presentation.Controllers
         {
             var createdWorkerList = await _orderServices.CreateOrderFormWorkerList(workerList);
             return Ok(createdWorkerList);
+        }
+
+        [HttpPost("create/form/department")]
+        public async Task<IActionResult> CreateOrderFormDepartmentAsync(OrderFormDepartment department)
+        {
+            var createdDepartment = await _orderServices.CreatOrderFormDepartmentAsync(department);
+            return Ok(createdDepartment);
         }
 
         /*
@@ -84,6 +91,13 @@ namespace Presentation.Controllers
         {
             var orderFormPayInfo = await _orderServices.GetOrderFormPayInfoAsync(orderFormId);
             return Ok(orderFormPayInfo);
+        }
+
+        [HttpGet("get/orderform/department/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormDepartmentAsync(int orderFormId)
+        {
+            var orderFormDepartment = await _orderServices.GetOrderFormDepartmentAsync(orderFormId);
+            return Ok(orderFormDepartment);
         }
 
         [HttpGet("get/orderform/signiture/{orderFormId}")]
@@ -124,7 +138,7 @@ namespace Presentation.Controllers
          * PUT Section
          */
         [HttpPut("update/orderform/detail")]
-        public async Task<IActionResult> UpdateOrderDetailAsync(OrderItems orderItems)
+        public async Task<IActionResult> UpdateOrderDetailAsync(OrderFormDetail orderItems)
         {
             await _orderServices.UpdateOrderDetailAsync(orderItems);
             return Ok();

@@ -41,7 +41,7 @@ namespace Infrastructure.Repositories
                     SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, order);
         }
-        public async Task<int> CreatOrderDetailAsync(OrderItems orderItems)
+        public async Task<int> CreatOrderDetailAsync(OrderFormDetail orderItems)
         {
             var writeCommand = @"
                         INSERT INTO orderforms_details
@@ -117,6 +117,18 @@ namespace Infrastructure.Repositories
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, workerList);
         }
 
+        public async Task<int> CreatOrderFormDepartmentAsync(OrderFormDepartment department)
+        {
+            var writeCommand = @"
+                    INSERT INTO orderforms_department
+                        (orderform_id, department_id)
+                    VALUES
+                        (@OrderId, @DepartmentId);
+                    SELECT LAST_INSERT_ID();";
+            var departmentId = await _dbConnection.ExecuteScalarAsync<int>(writeCommand, department);
+            return departmentId;
+        }
+
         /*
          * Read Section
          */
@@ -135,7 +147,7 @@ namespace Infrastructure.Repositories
                         updated_at AS UpdatedAt
                     FROM orderforms";
             var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand);
-            return orders.ToList();
+            return orders.AsList();
         }
 
         public async Task<OrderForm> GetOrderByIdAsync(int orderFormId)
@@ -175,11 +187,11 @@ namespace Infrastructure.Repositories
                     WHERE creator_id = @UserId";
             var parameters = new { UserId = userId };
             var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
-            return orders.ToList();
+            return orders.AsList();
         }
 
 
-        public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
+        public async Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId)
         {
             var readCommand = @"
                     SELECT 
@@ -195,8 +207,8 @@ namespace Infrastructure.Repositories
                     FROM orderforms_details
                     WHERE orderform_id = @OrderFormId";
             var parameters = new { OrderFormId = orderFormId };
-            var orderDetails = await _dbConnection.QueryAsync<OrderItems>(readCommand, parameters);
-            return orderDetails.ToList();
+            var orderDetails = await _dbConnection.QueryAsync<OrderFormDetail>(readCommand, parameters);
+            return orderDetails.AsList();
         }
 
         public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
@@ -213,7 +225,7 @@ namespace Infrastructure.Repositories
                     JOIN roles r ON oc.check_role_id = r.role_id
                     WHERE o.id = @OrderFormId;";
             var getStatus = await _dbConnection.QueryAsync<OrderFormStatus>(readCommand, new { OrderFormId = orderFormId });
-            return getStatus.ToList();
+            return getStatus.AsList();
         }
 
         public async Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId)
@@ -262,7 +274,29 @@ namespace Infrastructure.Repositories
                     WHERE o.id = @OrderFormId";
             var parameters = new { OrderFormId = orderFormId };
             var orderFormWithWorkers = await _dbConnection.QueryAsync<OrderFormWorkers>(query, parameters);
-            return orderFormWithWorkers.ToList();
+            return orderFormWithWorkers.AsList();
+        }
+
+        public async Task<List<OrderFormDepartmentDto>> GetOrderFormDepartmentAsync(int orderFormId)
+        {
+            var query = @"
+                    SELECT 
+                        o.id AS OrderId,
+                        o.creator_id AS CreatorId,
+                        o.project_id AS ProjectId,
+                        o.order_name AS OrderName,
+                        o.order_description AS OrderDescription,
+                        o.created_at AS CreatedAt,
+                        o.updated_at AS UpdatedAt,
+                        od.department_id AS DepartmentId,
+                        d.department_name AS DepartmentName
+                    FROM orderforms o
+                    JOIN orderforms_department od ON o.id = od.orderform_id
+                    JOIN departments d ON od.department_id = d.department_id
+                    WHERE o.id = @OrderFormId";
+            var parameters = new { OrderFormId = orderFormId };
+            var orderFormWithDepartment = await _dbConnection.QueryAsync<OrderFormDepartmentDto>(query, parameters);
+            return orderFormWithDepartment.AsList();
         }
 
         public async Task<Dictionary<string, int>> GetOrderFormStatusCountAsync()
@@ -296,7 +330,7 @@ namespace Infrastructure.Repositories
         /*
          * Update Section
          */
-        public async Task UpdateOrderDetailAsync(OrderItems orderItems)
+        public async Task UpdateOrderDetailAsync(OrderFormDetail orderItems)
         {
             var updateCommand = @"
                     UPDATE orderforms_details

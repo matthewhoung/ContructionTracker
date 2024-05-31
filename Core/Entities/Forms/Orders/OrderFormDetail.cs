@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities.Forms
 {
-    public class OrderItems
+    public class OrderFormDetail
     {
         public int DetailId { get; set; }
         public int OrderFormId { get; set; }

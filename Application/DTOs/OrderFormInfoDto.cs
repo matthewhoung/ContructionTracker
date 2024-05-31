@@ -13,12 +13,12 @@ namespace Application.DTOs
         public string OrderName { get; set; }
         public string OrderDescription { get; set; }
         public string Status { get; set; }
-        public int DepartmentId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<OrderItems> OrderItems { get; set; }
+        public List<OrderFormDetail> OrderItems { get; set; }
         public List<OrderFormWorkers> Workers { get; set; }
         public OrderFormPaymentDto PaymentInfo { get; set; }
+        public List<OrderFormDepartmentDto> Department { get; set; }
         public List<OrderFormStatus> Signatures { get; set; }
         public List<FileUploaderPath> FilePaths { get; set; }
     }

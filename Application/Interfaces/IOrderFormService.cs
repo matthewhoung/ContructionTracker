@@ -9,25 +9,27 @@ namespace Application.Interfaces
     {
         //Create Section
         Task<int> CreateOrderFormAsync(OrderForm orderForm);
-        Task<int> CreatOrderFormDetailAsync(OrderItems orderItems);
+        Task<int> CreatOrderFormDetailAsync(OrderFormDetail orderItems);
         Task CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember);
         Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList);
         Task<int> CreateOrderPayInfo(OrderFormPayInfo paymentInfo);
+        Task<int> CreatOrderFormDepartmentAsync(OrderFormDepartment department);
 
         //Read Section
         Task<List<OrderForm>> GetAllOrderFormAsync();
         Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
         Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId);
-        Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId);
+        Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);
         Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
+        Task<List<OrderFormDepartmentDto>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
         Task<int> GetOrderFormStatus(int orderfromId);
 
         //Update Section
 
-        Task UpdateOrderDetailAsync(OrderItems orderItems);
+        Task UpdateOrderDetailAsync(OrderFormDetail orderItems);
         Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
         Task UpdateWorkerAsync(OrderFromWorkerDto workerList);
         Task UpdateStatusAsync(int orderFormId);
