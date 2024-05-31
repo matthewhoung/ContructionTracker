@@ -5,7 +5,7 @@ using Core.Entities.Settings;
 
 namespace Application.Interfaces
 {
-    public interface IOrderServices
+    public interface IOrderFormService
     {
         //write section
         Task<int> CreateOrderFormAsync(OrderForm orderForm);

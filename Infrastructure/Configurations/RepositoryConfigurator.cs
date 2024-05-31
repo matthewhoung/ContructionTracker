@@ -1,6 +1,5 @@
 ﻿using Application.Application;
 using Application.Interfaces;
-using Application.Services;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,9 +9,9 @@ namespace Infrastructure.Configurations
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderFormRepository, OrderFormRepository>();
             services.AddScoped<IGenericRepository , GenericRepository>();
-            services.AddScoped<IUploaderRepository, UploaderRepository>();
+            services.AddScoped<IFileUploaderRepository, FileUploaderRepository>();
             
             return services;
         }

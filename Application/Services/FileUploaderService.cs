@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Services
 {
-    internal class UploaderService : IUploaderService
+    internal class FileUploaderService : IFileUploaderService
     {
-        private readonly IUploaderRepository _uploaderRepository;
+        private readonly IFileUploaderRepository _uploaderRepository;
 
-        public UploaderService(IUploaderRepository uploaderRepository)
+        public FileUploaderService(IFileUploaderRepository uploaderRepository)
         {
             _uploaderRepository = uploaderRepository;
         }
 
-        public async Task<int> UploadFileAsync(Uploader uploader, IFormFile file)
+        public async Task<int> UploadFileAsync(FileUploader uploader, IFormFile file)
         {
             return await _uploaderRepository.CreateFileUrlAsync(uploader, file);
         }

@@ -11,11 +11,11 @@ namespace Presentation.Controllers
     [ApiController]
     public class FileUploaderController : ControllerBase
     {
-        private readonly IUploaderService _uploaderService;
+        private readonly IFileUploaderService _uploaderService;
 
-        public FileUploaderController(IUploaderService uploaderService)
+        public FileUploaderController(IFileUploaderService fileUploader)
         {
-            _uploaderService = uploaderService;
+            _uploaderService = fileUploader;
         }
 
         [HttpPost("file")]
@@ -28,7 +28,7 @@ namespace Presentation.Controllers
 
             try
             {
-                var uploader = new Uploader
+                var uploader = new FileUploader
                 {
                     OrderFormId = uploaderInfo.OrderFormId,
                     UploaderId = uploaderInfo.UploaderId,

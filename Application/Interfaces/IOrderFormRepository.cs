@@ -13,7 +13,7 @@ namespace Application.Application
      *            : 單據狀態(checklist => status => pending, processing, completed)
      * 新增刪除功能: 細項
      */
-    public interface IOrderRepository
+    public interface IOrderFormRepository
     {
         //write section
         Task<int> CreateOrderAsync(OrderForm order);

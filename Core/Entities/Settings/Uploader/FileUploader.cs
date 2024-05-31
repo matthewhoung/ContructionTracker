@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities.Settings.Uploader
 {
-    public class Uploader
+    public class FileUploader
     {
         public int FileId { get; set; }
         public int OrderFormId { get; set; }

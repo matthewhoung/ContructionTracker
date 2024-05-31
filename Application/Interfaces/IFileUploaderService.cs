@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces
 {
-    public interface IUploaderService
+    public interface IFileUploaderService
     {
-        Task<int> UploadFileAsync(Uploader uploader, IFormFile file);
+        Task<int> UploadFileAsync(FileUploader uploader, IFormFile file);
     }
 }

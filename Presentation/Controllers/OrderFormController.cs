@@ -10,8 +10,8 @@ namespace Presentation.Controllers
     [ApiController]
     public class OrderFormController : ControllerBase
     {
-        private readonly IOrderServices _orderServices;
-        public OrderFormController(IOrderServices orderServices)
+        private readonly IOrderFormService _orderServices;
+        public OrderFormController(IOrderFormService orderServices)
         {
             _orderServices = orderServices;
         }

@@ -8,11 +8,11 @@ using System.Data;
 
 namespace Infrastructure.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderFormRepository : IOrderFormRepository
     {
         private readonly IDbConnection _dbConnection;
 
-        public OrderRepository(IDbConnection dbConnection)
+        public OrderFormRepository(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

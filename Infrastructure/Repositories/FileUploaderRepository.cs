@@ -8,20 +8,20 @@ using System.Data;
 
 namespace Infrastructure.Repositories
 {
-    public class UploaderRepository : IUploaderRepository
+    public class FileUploaderRepository : IFileUploaderRepository
     {
         private readonly IDbConnection _dbConnection;
         private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
 
-        public UploaderRepository(IDbConnection dbConnection, IWebHostEnvironment environment, IConfiguration configuration)
+        public FileUploaderRepository(IDbConnection dbConnection, IWebHostEnvironment environment, IConfiguration configuration)
         {
             _dbConnection = dbConnection;
             _environment = environment;
             _configuration = configuration;
         }
 
-        public async Task<int> CreateFileUrlAsync(Uploader uploader, IFormFile file)
+        public async Task<int> CreateFileUrlAsync(FileUploader uploader, IFormFile file)
         {
             using (_dbConnection)
             {

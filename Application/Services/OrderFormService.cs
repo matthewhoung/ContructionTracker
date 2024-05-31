@@ -7,11 +7,11 @@ using Core.Entities.Settings;
 
 namespace Application.Services
 {
-    public class OrderService : IOrderServices
+    public class OrderFormService : IOrderFormService
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderFormRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderFormService(IOrderFormRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
