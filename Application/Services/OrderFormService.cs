@@ -82,6 +82,17 @@ namespace Application.Services
             return orderformInfo;
         }
 
+        public async Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId)
+        {
+            var orderforms = await _orderRepository.GetOrderByUserAsync(userId);
+            if (orderforms == null || !orderforms.Any()) return null;
+
+            var orderformInfos = await Task.WhenAll(
+                orderforms.Select(order => GetOrderFormAsync(order.Id)));
+
+            return orderformInfos.Where(info => info != null).ToList();
+        }
+
         public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
         {
             var orderDetails = await _orderRepository.GetOrderDetailAsync(orderFormId);

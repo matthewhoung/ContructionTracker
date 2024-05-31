@@ -166,6 +166,27 @@ namespace Infrastructure.Repositories
             return orders;
         }
 
+        public async Task<List<OrderForm>> GetOrderByUserAsync(int userId)
+        {
+            var readCommand = @"
+            SELECT 
+                id AS Id,
+                creator_id AS CreatorId,
+                project_id AS ProjectId, 
+                order_name AS OrderName,
+                status AS Status,
+                order_description AS OrderDescription, 
+                department_id AS DepartmentId, 
+                created_at AS CreatedAt, 
+                updated_at AS UpdatedAt
+            FROM orderforms
+            WHERE creator_id = @UserId";
+            var parameters = new { UserId = userId };
+            var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
+            return orders.ToList();
+        }
+
+
         public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
         {
             var readCommand = @"

@@ -17,6 +17,7 @@ namespace Application.Interfaces
         //Read Section
         Task<List<OrderForm>> GetAllOrderFormAsync();
         Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
+        Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId);
         Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId);
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);

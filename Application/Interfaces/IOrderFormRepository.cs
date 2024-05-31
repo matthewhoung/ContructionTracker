@@ -7,7 +7,7 @@ namespace Application.Application
 {
     //TODO:
     /*
-     * 新增取得功能: 組裝採購單(Order + detail + workerlist + payinfo + status)
+     * 新增取得功能: 
      * 新增創建功能: 
      * 新增更新功能: 單據名稱、單據說明、付款方式、工種廠商、簽核(退簽)
      * 新增刪除功能: 
@@ -25,6 +25,7 @@ namespace Application.Application
         //Read Section
         Task<List<OrderForm>> GetOrderAllAsync();
         Task<OrderForm> GetOrderByIdAsync(int orderFormId);
+        Task<List<OrderForm>> GetOrderByUserAsync(int userId);
         Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId);
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);

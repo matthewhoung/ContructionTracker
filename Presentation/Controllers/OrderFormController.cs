@@ -113,6 +113,13 @@ namespace Presentation.Controllers
             return Ok(orderFormStatus);
         }
 
+        [HttpGet("get/orderform/user/{userId}")]
+        public async Task<IActionResult> GetOrderByUserAsync(int userId)
+        {
+            var orderForm = await _orderServices.GetOrderByUserAsync(userId);
+            return Ok(orderForm);
+        }
+
         /*
          * PUT Section
          */
