@@ -71,6 +71,14 @@ namespace Presentation.Controllers
             var orderForm = await _orderServices.GetOrderFormAsync(orderFormId);
             return Ok(orderForm);
         }
+
+        [HttpGet("get/orderform/detail/{orderFormId}")]
+        public async Task<IActionResult> GetOrderDetailAsync(int orderFormId)
+        {
+            var orderDetails = await _orderServices.GetOrderDetailAsync(orderFormId);
+            return Ok(orderDetails);
+        }
+
         [HttpGet("get/orderform/payinfo/{orderFormId}")]
         public async Task<IActionResult> GetOrderFormPayInfoAsync(int orderFormId)
         {
@@ -78,10 +86,10 @@ namespace Presentation.Controllers
             return Ok(orderFormPayInfo);
         }
 
-        [HttpGet("get/orderform/status/{orderFormId}")]
-        public async Task<IActionResult> GetOrderFormStatusAsync(int orderFormId)
+        [HttpGet("get/orderform/signiture/{orderFormId}")]
+        public async Task<IActionResult> GetOrderFormSignitureAsync(int orderFormId)
         {
-            var orderFormStatus = await _orderServices.GetOrderFormStatusAsync(orderFormId);
+            var orderFormStatus = await _orderServices.GetOrderFormSignitureAsync(orderFormId);
             return Ok(orderFormStatus);
         }
         [HttpGet("get/orderform/worker/{orderFormId}")]
@@ -98,6 +106,13 @@ namespace Presentation.Controllers
             return Ok(orderFormStatusCount);
         }
 
+        [HttpGet("get/orderform/status/{orderfromId}")]
+        public async Task<IActionResult> GetOrderFormStatus(int orderfromId)
+        {
+            var orderFormStatus = await _orderServices.GetOrderFormStatus(orderfromId);
+            return Ok(orderFormStatus);
+        }
+
         /*
          * PUT Section
          */
@@ -110,9 +125,20 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("update/ischecked/{orderFormId}/{userId}/{isChecked}")]
-        public async Task<IActionResult> UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        public async Task<IActionResult> UpdateSignatureAsync(int orderFormId, int userId, bool isChecked)
         {
-            await _orderServices.UpdateIsCheckedAsync(orderFormId, userId, isChecked);
+            await _orderServices.UpdateSignatureAsync(orderFormId, userId, isChecked);
+            return Ok();
+        }
+
+        /*
+         * DELETE Section
+         */
+
+        [HttpDelete("delete/orderform/detail/{orderformId}")]
+        public async Task<IActionResult> DeleteOrderDetailAsync(int orderformId)
+        {
+            await _orderServices.DeleteOrderDetailAsync(orderformId);
             return Ok();
         }
     }

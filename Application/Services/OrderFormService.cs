@@ -17,7 +17,7 @@ namespace Application.Services
         }
 
         /*
-         * Write Section
+         * Create Section
          */
         public async Task<int> CreateOrderFormAsync(OrderForm orderForm)
         {
@@ -52,10 +52,40 @@ namespace Application.Services
             return orderForms.ToList();
         }
 
-        public async Task<OrderForm> GetOrderFormAsync(int orderFormId)
+        public async Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId)
         {
             var orderForm = await _orderRepository.GetOrderByIdAsync(orderFormId);
-            return orderForm;
+            if (orderForm == null) return null;
+
+            var orderItems = await _orderRepository.GetOrderDetailAsync(orderFormId);
+            var workers = await _orderRepository.GetOrderFormWorkerAsync(orderFormId);
+            var payInfo = await _orderRepository.GetOrderFormPayInfoAsync(orderFormId);
+            var signatures = await _orderRepository.GetOrderFormSignitureAsync(orderFormId);
+
+            var orderformInfo = new OrderFormInfoDto
+            {
+                Id = orderForm.Id,
+                CreatorId = orderForm.CreatorId,
+                ProjectId = orderForm.ProjectId,
+                OrderName = orderForm.OrderName,
+                OrderDescription = orderForm.OrderDescription,
+                Status = orderForm.Status,
+                DepartmentId = orderForm.DepartmentId,
+                OrderItems = orderItems,
+                Workers = workers,
+                PaymentInfo = payInfo,
+                Signatures = signatures,
+                CreatedAt = orderForm.CreatedAt,
+                UpdatedAt = orderForm.UpdatedAt
+            };
+
+            return orderformInfo;
+        }
+
+        public async Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId)
+        {
+            var orderDetails = await _orderRepository.GetOrderDetailAsync(orderFormId);
+            return orderDetails.ToList();
         }
 
         public async Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId)
@@ -64,9 +94,9 @@ namespace Application.Services
             return orderFormPayInfo;
         }
 
-        public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
+        public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
         {
-            var orderFormStatus = await _orderRepository.GetOrderFormStatusAsync(orderFormId);
+            var orderFormStatus = await _orderRepository.GetOrderFormSignitureAsync(orderFormId);
             return orderFormStatus.ToList();
         }
 
@@ -82,6 +112,11 @@ namespace Application.Services
             return orderFormStatusCount;
         }
 
+        public async Task<int> GetOrderFormStatus(int orderfromId)
+        {
+            return await _orderRepository.GetOrderFormStatus(orderfromId);
+        }
+
         /*
          * Update Section
          */
@@ -90,9 +125,18 @@ namespace Application.Services
             await _orderRepository.UpdateStatusAsync(orderFormId);
         }
 
-        public async Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        public async Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked)
         {
-            await _orderRepository.UpdateIsCheckedAsync(orderFormId, userId, isChecked);
+            await _orderRepository.UpdateSignatureAsync(orderFormId, userId, isChecked);
+        }
+
+        /*
+         * Delete Section
+         */
+
+        public async Task DeleteOrderDetailAsync(int orderformId)
+        {
+            await _orderRepository.DeleteOrderDetailAsync(orderformId);
         }
     }
 }

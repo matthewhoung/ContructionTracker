@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             _dbConnection = dbConnection;
         }
         /*
-         * Write Section
+         * Create Section
          */
         public async Task<int> CreateOrderAsync(OrderForm order)
         {
@@ -53,9 +53,25 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                         INSERT INTO orderforms_details
-                            (detail_id, orderform_id, item_name,item_description, quantity,unit_price ,unit_id , total_price, item_ischeck)
+                            (detail_id, 
+                            orderform_id, 
+                            item_name,
+                            item_description, 
+                            quantity,
+                            unit_price,
+                            unit_id, 
+                            total_price, 
+                            item_ischeck)
                         VALUES
-                            (@DetailId, @OrderItemId, @ItemName, @ItemDescription, @Quantity, @UnitPrice, @UnitNameId, @TotalPrice, @IsChecked);
+                            (@DetailId, 
+                            @OrderItemId, 
+                            @ItemName, 
+                            @ItemDescription, 
+                            @Quantity, 
+                            @UnitPrice, 
+                            @UnitNameId, 
+                            @TotalPrice, 
+                            @IsChecked);
                         SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, orderItems);
         }
@@ -64,9 +80,15 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                     INSERT INTO orderforms_payinfo
-                        (orderform_id, pay_amount, pay_type_id, pay_by_id)
+                        (orderform_id, 
+                        pay_amount, 
+                        pay_type_id, 
+                        pay_by_id)
                     VALUES
-                        (@OrderFormId, @PaymentAmount, @PaymentTypeId, @PaymentById);
+                        (@OrderFormId, 
+                        @PaymentAmount, 
+                        @PaymentTypeId, 
+                        @PaymentById);
                     SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, paymentInfo);
         }
@@ -75,9 +97,15 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                     INSERT INTO orderforms_checklist
-                        (order_form_id, check_role_id,user_id, is_checked)
+                        (order_form_id, 
+                        check_role_id,
+                        user_id, 
+                        is_checked)
                     VALUES
-                        (@OrderFormId, @CheckMemberId,@UserId, @isChecked)";
+                        (@OrderFormId, 
+                        @CheckMemberId,
+                        @UserId, 
+                        @isChecked)";
             var parameters = new { OrderFormId = orderFormCheckMember.OrderFormId, CheckMemberId = orderFormCheckMember.OrderRoleId, isChecked = orderFormCheckMember.isChecked };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
@@ -86,9 +114,13 @@ namespace Infrastructure.Repositories
         {
             var writeCommand = @"
                     INSERT INTO orderforms_workers
-                        (orderform_id, worker_type_id, worker_team_id)
+                        (orderform_id, 
+                        worker_type_id, 
+                        worker_team_id)
                     VALUES
-                        (@OrderFormId, @WorkerTypeId, @WorkerTeamId);
+                        (@OrderFormId, 
+                        @WorkerTypeId, 
+                        @WorkerTeamId);
                     SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, workerList);
         }
@@ -121,7 +153,8 @@ namespace Infrastructure.Repositories
                         id AS Id,
                         creator_id AS CreatorId,
                         project_id AS ProjectId, 
-                        order_name AS OrderName, 
+                        order_name AS OrderName,
+                        status AS Status,
                         order_description AS OrderDescription, 
                         department_id AS DepartmentId, 
                         created_at AS CreatedAt, 
@@ -153,7 +186,7 @@ namespace Infrastructure.Repositories
             return orderDetails.ToList();
         }
 
-        public async Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId)
+        public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
         {
             var readCommand = @"
                     SELECT
@@ -235,6 +268,17 @@ namespace Infrastructure.Repositories
             return result;
         }
 
+        public async Task<int> GetOrderFormStatus(int orderfromId)
+        {
+            var readCommand = @"
+                    SELECT
+                        status
+                    FROM orderforms
+                    WHERE id = @OrderFormId";
+            var parameters = new { OrderFormId = orderfromId };
+            var status = await _dbConnection.QuerySingleOrDefaultAsync<int>(readCommand, parameters);
+            return status;
+        }
 
         /*
          * Update Section
@@ -242,7 +286,7 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateStatusAsync(int orderFormId)
         {
-            var checklist = await GetOrderFormStatusAsync(orderFormId);
+            var checklist = await GetOrderFormSignitureAsync(orderFormId);
 
             var allChecked = checklist.All(item => item.isChecked);
             var creatorChecked = checklist.Any(item => item.RoleName == "Creator" && item.isChecked);
@@ -257,7 +301,7 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(updateCommand, parameters);
         }
 
-        public async Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked)
+        public async Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked)
         {
             var updateCommand = @"
                     UPDATE orderforms_checklist
@@ -272,6 +316,19 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(updateCommand, parameters);
 
             await UpdateStatusAsync(orderFormId);
+        }
+
+        /*
+         * Delete Section
+         */
+
+        public async Task DeleteOrderDetailAsync(int orderformId)
+        {
+            var deleteCommand = @"
+                    DELETE FROM orderforms_details
+                    WHERE orderform_id = @OrderItemId";
+            var parameters = new { OrderItemId = orderformId };
+            await _dbConnection.ExecuteAsync(deleteCommand, parameters);
         }
     }
 }

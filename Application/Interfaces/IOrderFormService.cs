@@ -7,24 +7,30 @@ namespace Application.Interfaces
 {
     public interface IOrderFormService
     {
-        //write section
+        //Create Section
         Task<int> CreateOrderFormAsync(OrderForm orderForm);
         Task<int> CreatOrderFormDetailAsync(OrderItems orderItems);
         Task CreateOrderFormCheckList(OrderFormCheckList orderFormCheckMember);
         Task<int> CreateOrderFormWorkerList(OrderFromWorkerDto workerList);
         Task<int> CreateOrderPayInfo(OrderFormPayInfo paymentInfo);
 
-        //read section
+        //Read Section
         Task<List<OrderForm>> GetAllOrderFormAsync();
-        Task<OrderForm> GetOrderFormAsync(int orderFormId);
+        Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
+        Task<List<OrderItems>> GetOrderDetailAsync(int orderFormId);
         Task<OrderFormPaymentDto> GetOrderFormPayInfoAsync(int orderFormId);
-        Task<List<OrderFormStatus>> GetOrderFormStatusAsync(int orderFormId);
+        Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);
         Task<List<OrderFormWorkers>> GetOrderFormWorkerAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
+        Task<int> GetOrderFormStatus(int orderfromId);
 
-        //update section
+        //Update Section
 
         Task UpdateStatusAsync(int orderFormId);
-        Task UpdateIsCheckedAsync(int orderFormId, int userId, bool isChecked);
+        Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);
+
+        //Delete Section
+
+        Task DeleteOrderDetailAsync(int orderformId);
     }
 }
