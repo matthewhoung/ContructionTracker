@@ -210,6 +210,18 @@ namespace Infrastructure.Repositories
             return orderDetails.AsList();
         }
 
+        public async Task<int> GetSumDetailTotalPriceAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELECT 
+                        SUM(total_price) AS TotalPrice
+                    FROM orderforms_details
+                    WHERE orderform_id = @OrderFormId";
+            var parameters = new { OrderFormId = orderFormId };
+            var totalPrice = await _dbConnection.ExecuteScalarAsync<int>(readCommand, parameters);
+            return totalPrice;
+        }
+
         public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
         {
             var readCommand = @"
@@ -336,6 +348,22 @@ namespace Infrastructure.Repositories
             await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 
+        public async Task UpdateOrderDetailTotalPriceAsync(int orderFormId)
+        {
+            var orderDetails = await GetOrderDetailAsync(orderFormId);
+
+            foreach (var detail in orderDetails)
+            {
+                var totalPrice = detail.Quantity * detail.UnitPrice;
+                var updateCommand = @"
+                        UPDATE orderforms_details
+                        SET total_price = @TotalPrice
+                        WHERE detail_id = @DetailId AND orderform_id = @OrderFormId";
+                var parameter = new { TotalPrice = totalPrice, DetailId = detail.DetailId, OrderFormId = orderFormId };
+                await _dbConnection.ExecuteAsync(updateCommand, parameter);
+            }
+        }
+
         public async Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
         {
             var updateCommand = @"
@@ -351,6 +379,17 @@ namespace Infrastructure.Repositories
                 PaymentById = paymentInfo.PaymentById,
                 OrderId = paymentInfo.OrderId
             };
+            await _dbConnection.ExecuteAsync(updateCommand, parameter);
+        }
+
+        public async Task UpdateOrderFormPayinfoAmountAsync(int orderFormId)
+        {
+            var sumTotalPrice = await GetSumDetailTotalPriceAsync(orderFormId);
+            var updateCommand = @"
+                    UPDATE orderforms_payinfo
+                    SET pay_amount = @TotalPrice
+                    WHERE orderform_id = @OrderFormId";
+            var parameter = new { TotalPrice = sumTotalPrice, OrderFormId = orderFormId };
             await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 

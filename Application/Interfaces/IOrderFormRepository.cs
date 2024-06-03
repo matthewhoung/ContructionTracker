@@ -1,5 +1,4 @@
-﻿using Application.DTOs;
-using Core.Entities.Forms;
+﻿using Core.Entities.Forms;
 using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
 
@@ -27,6 +26,7 @@ namespace Application.Application
         Task<OrderForm> GetOrderByIdAsync(int orderFormId);
         Task<List<OrderForm>> GetOrderByUserAsync(int userId);
         Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
+        Task<int> GetSumDetailTotalPriceAsync(int orderFormId);
         Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);
         Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId);
@@ -37,7 +37,9 @@ namespace Application.Application
         //Update Section
 
         Task UpdateOrderDetailAsync(OrderFormDetail orderItems);
+        Task UpdateOrderDetailTotalPriceAsync(int orderFormId);
         Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
+        Task UpdateOrderFormPayinfoAmountAsync(int orderFormId);
         Task UpdateWorkerAsync(OrderFormWorker workerList);
         Task UpdateStatusAsync(int orderFormId);
         Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);

@@ -20,6 +20,7 @@ namespace Application.Interfaces
         Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
         Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId);
         Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
+        Task<int> GetDetailTotalPriceAsync(int orderFormId);
         Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId);
         Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId);
         Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId);
@@ -30,7 +31,9 @@ namespace Application.Interfaces
         //Update Section
 
         Task UpdateOrderDetailAsync(OrderFormDetail orderItems);
+        Task UpdateOrderDetailTotalPriceAsync(int orderFormId);
         Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo);
+        Task UpdateOrderFormPayinfoAmountAsync(int orderFormId);
         Task UpdateWorkerAsync(OrderFormWorker workerList);
         Task UpdateStatusAsync(int orderFormId);
         Task UpdateSignatureAsync(int orderFormId, int userId, bool isChecked);

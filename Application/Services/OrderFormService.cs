@@ -109,6 +109,12 @@ namespace Application.Services
             return orderDetails;
         }
 
+        public async Task<int> GetDetailTotalPriceAsync(int orderFormId)
+        {
+            var totalPrice = await _orderRepository.GetSumDetailTotalPriceAsync(orderFormId);
+            return totalPrice;
+        }
+
         public async Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId)
         {
             var orderFormPayInfo = await _orderRepository.GetOrderFormPayInfoAsync(orderFormId);
@@ -153,9 +159,19 @@ namespace Application.Services
             await _orderRepository.UpdateOrderDetailAsync(orderItems);
         }
 
+        public async Task UpdateOrderDetailTotalPriceAsync(int orderFormId)
+        {
+            await _orderRepository.UpdateOrderDetailTotalPriceAsync(orderFormId);
+        }
+
         public async Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
         {
             await _orderRepository.UpdateOrderFormPayInfoAsync(paymentInfo);
+        }
+
+        public async Task UpdateOrderFormPayinfoAmountAsync(int orderFormId)
+        {
+            await _orderRepository.UpdateOrderFormPayinfoAmountAsync(orderFormId);
         }
 
         public async Task UpdateWorkerAsync(OrderFormWorker workerList)

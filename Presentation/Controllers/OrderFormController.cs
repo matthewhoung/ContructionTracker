@@ -79,11 +79,25 @@ namespace Presentation.Controllers
             return Ok(orderForm);
         }
 
+        [HttpGet("get/orderform/user/{userId}")]
+        public async Task<IActionResult> GetOrderByUserAsync(int userId)
+        {
+            var orderForm = await _orderServices.GetOrderByUserAsync(userId);
+            return Ok(new { Status = orderForm });
+        }
+
         [HttpGet("get/orderform/detail/{orderFormId}")]
         public async Task<IActionResult> GetOrderDetailAsync(int orderFormId)
         {
             var orderDetails = await _orderServices.GetOrderDetailAsync(orderFormId);
             return Ok(orderDetails);
+        }
+
+        [HttpGet("get/orderform/detail/totalprice/{orderFormId}")]
+        public async Task<IActionResult> GetDetailTotalPriceAsync(int orderFormId)
+        {
+            var totalPrice = await _orderServices.GetDetailTotalPriceAsync(orderFormId);
+            return Ok(totalPrice);
         }
 
         [HttpGet("get/orderform/payinfo/{orderFormId}")]
@@ -127,13 +141,6 @@ namespace Presentation.Controllers
             return Ok(orderFormStatus);
         }
 
-        [HttpGet("get/orderform/user/{userId}")]
-        public async Task<IActionResult> GetOrderByUserAsync(int userId)
-        {
-            var orderForm = await _orderServices.GetOrderByUserAsync(userId);
-            return Ok(new { Status = orderForm });
-        }
-
         /*
          * PUT Section
          */
@@ -148,6 +155,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
         {
             await _orderServices.UpdateOrderFormPayInfoAsync(paymentInfo);
+            return Ok();
+        }
+
+        [HttpPut("update/orderform/payinfo/amount/{orderFormId}")]
+        public async Task<IActionResult> UpdateOrderFormPayinfoAmountAsync(int orderFormId)
+        {
+            await _orderServices.UpdateOrderFormPayinfoAmountAsync(orderFormId);
             return Ok();
         }
 
