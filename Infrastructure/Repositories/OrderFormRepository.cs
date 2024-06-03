@@ -95,7 +95,12 @@ namespace Infrastructure.Repositories
                         @CheckMemberId,
                         @UserId, 
                         @isChecked)";
-            var parameters = new { OrderFormId = orderFormCheckMember.OrderId, CheckMemberId = orderFormCheckMember.OrderRoleId, isChecked = orderFormCheckMember.isChecked };
+            var parameters = new 
+            { 
+                OrderId = orderFormCheckMember.OrderId, 
+                CheckMemberId = orderFormCheckMember.OrderRoleId,
+                UserId = orderFormCheckMember.UserId,
+                isChecked = orderFormCheckMember.isChecked };
             await _dbConnection.ExecuteAsync(writeCommand, parameters);
         }
 
@@ -288,7 +293,7 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<int> GetOrderFormStatus(int orderfromId)
+        public async Task<string> GetOrderFormStatus(int orderfromId)
         {
             var readCommand = @"
                     SELECT
@@ -296,7 +301,7 @@ namespace Infrastructure.Repositories
                     FROM orderforms
                     WHERE id = @OrderFormId";
             var parameters = new { OrderFormId = orderfromId };
-            var status = await _dbConnection.QuerySingleOrDefaultAsync<int>(readCommand, parameters);
+            var status = await _dbConnection.QuerySingleOrDefaultAsync<string>(readCommand, parameters);
             return status;
         }
 
@@ -307,7 +312,8 @@ namespace Infrastructure.Repositories
         {
             var updateCommand = @"
                     UPDATE orderforms_details
-                    SET item_name = @ItemName,
+                    SET 
+                        item_name = @ItemName,
                         item_description = @ItemDescription,
                         quantity = @Quantity,
                         unit_price = @UnitPrice,
@@ -315,7 +321,19 @@ namespace Infrastructure.Repositories
                         total_price = @TotalPrice,
                         item_ischeck = @IsChecked
                     WHERE detail_id = @DetailId AND orderform_id = @OrderFormId";
-            await _dbConnection.ExecuteAsync(updateCommand, orderItems);
+            var parameter = new
+            {
+                ItemName = orderItems.ItemName,
+                ItemDescription = orderItems.ItemDescription,
+                Quantity = orderItems.Quantity,
+                UnitPrice = orderItems.UnitPrice,
+                UnitNameId = orderItems.UnitNameId,
+                TotalPrice = orderItems.TotalPrice,
+                IsChecked = orderItems.IsChecked,
+                DetailId = orderItems.DetailId,
+                OrderFormId = orderItems.OrderId
+            };
+            await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 
         public async Task UpdateOrderFormPayInfoAsync(OrderFormPayInfo paymentInfo)
@@ -324,9 +342,16 @@ namespace Infrastructure.Repositories
                     UPDATE orderforms_payinfo
                     SET pay_amount = @PaymentAmount,
                         pay_type_id = @PaymentTypeId,
-                        pay_by_id = @Payment
-                    WHERE orderform_id = @OrderFormId";
-            await _dbConnection.ExecuteAsync(updateCommand, paymentInfo);
+                        pay_by_id = @PaymentById
+                    WHERE orderform_id = @OrderId";
+            var parameter = new
+            {
+                PaymentAmount = paymentInfo.PaymentAmount,
+                PaymentTypeId = paymentInfo.PaymentTypeId,
+                PaymentById = paymentInfo.PaymentById,
+                OrderId = paymentInfo.OrderId
+            };
+            await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 
         public async Task UpdateWorkerAsync(OrderFormWorker workerList)
@@ -336,7 +361,13 @@ namespace Infrastructure.Repositories
                     SET worker_type_id = @WorkerTypeId,
                         worker_team_id = @WorkerTeamId
                     WHERE orderform_id = @OrderId";
-            await _dbConnection.ExecuteAsync(updateCommand, workerList);
+            var parameter = new
+            {
+                WorkerTypeId = workerList.WorkerTypeId,
+                WorkerTeamId = workerList.WorkerTeamId,
+                OrderId = workerList.OrderId
+            };
+            await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 
         public async Task UpdateStatusAsync(int orderFormId)
@@ -361,7 +392,7 @@ namespace Infrastructure.Repositories
             var updateCommand = @"
                     UPDATE orderforms_checklist
                     SET is_checked = @IsChecked
-                    WHERE order_form_id = @OrderFormId AND user_id = @UserId";
+                    WHERE orderform_id = @OrderFormId AND user_id = @UserId";
             var parameters = new 
             {
                 IsChecked = isChecked,

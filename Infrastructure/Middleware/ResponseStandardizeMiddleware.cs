@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 public class ResponseStandardizeMiddleware
 {
@@ -17,13 +19,15 @@ public class ResponseStandardizeMiddleware
         using (var responseBody = new MemoryStream())
         {
             context.Response.Body = responseBody;
+
             await _next(context);
+
             context.Response.Body = originalBodyStream;
+
             var responseContent = await FormatResponse(responseBody, context.Response.StatusCode);
 
+            context.Response.ContentType = "application/json";
             context.Response.ContentLength = Encoding.UTF8.GetByteCount(responseContent);
-            context.Response.Body = originalBodyStream;
-
             await context.Response.WriteAsync(responseContent);
         }
     }
@@ -33,11 +37,21 @@ public class ResponseStandardizeMiddleware
         responseBody.Seek(0, SeekOrigin.Begin);
         var bodyAsText = await new StreamReader(responseBody).ReadToEndAsync();
 
+        object data;
+        try
+        {
+            data = JsonConvert.DeserializeObject(bodyAsText);
+        }
+        catch (JsonReaderException)
+        {
+            data = bodyAsText; // Return the raw text if it's not valid JSON
+        }
+
         var responseObj = new ResponseBody
         {
-            code = statusCode.ToString(),
-            message = GetStatusMessage(statusCode),
-            data = string.IsNullOrWhiteSpace(bodyAsText) ? null : JsonConvert.DeserializeObject(bodyAsText)
+            Code = statusCode.ToString(),
+            Message = GetStatusMessage(statusCode),
+            Data = data
         };
 
         return JsonConvert.SerializeObject(responseObj);
@@ -62,7 +76,7 @@ public class ResponseStandardizeMiddleware
 
 public class ResponseBody
 {
-    public string code { get; set; }
-    public string message { get; set; }
-    public object data { get; set; }
+    public string Code { get; set; }
+    public string Message { get; set; }
+    public object Data { get; set; }
 }

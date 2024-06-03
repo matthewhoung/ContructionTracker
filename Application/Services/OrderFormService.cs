@@ -133,7 +133,7 @@ namespace Application.Services
             return orderFormStatusCount;
         }
 
-        public async Task<int> GetOrderFormStatus(int orderfromId)
+        public async Task<string> GetOrderFormStatus(int orderfromId)
         {
             return await _orderRepository.GetOrderFormStatus(orderfromId);
         }

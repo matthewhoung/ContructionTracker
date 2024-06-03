@@ -6,9 +6,9 @@ using Core.Entities.Settings;
 namespace Application.Application
 {
     //TODO:
-    /*
-     * 新增取得功能: 
-     * 新增創建功能: 
+    /* 
+     * 新增創建功能:
+     * 新增取得功能: 取得待使用者簽核的訂單，取得各狀態的訂單
      * 新增更新功能: 
      * 新增刪除功能: 
      */
@@ -32,7 +32,7 @@ namespace Application.Application
         Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId);
         Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
-        Task<int> GetOrderFormStatus(int orderfromId);
+        Task<string> GetOrderFormStatus(int orderfromId);
 
         //Update Section
 

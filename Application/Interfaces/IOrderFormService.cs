@@ -25,7 +25,7 @@ namespace Application.Interfaces
         Task<List<OrderFormWorker>> GetOrderFormWorkerAsync(int orderFormId);
         Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
-        Task<int> GetOrderFormStatus(int orderfromId);
+        Task<string> GetOrderFormStatus(int orderfromId);
 
         //Update Section
 
