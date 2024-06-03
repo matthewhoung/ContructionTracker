@@ -17,6 +17,7 @@ namespace Application.Interfaces
 
         //Read Section
         Task<List<OrderForm>> GetAllOrderFormAsync();
+        Task<List<OrderForm>> GetUserOrderFormAsync(int userId);
         Task<OrderFormInfoDto> GetOrderFormAsync(int orderFormId);
         Task<List<OrderFormInfoDto>> GetOrderByUserAsync(int userId);
         Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
@@ -27,6 +28,7 @@ namespace Application.Interfaces
         Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
         Task<string> GetOrderFormStatus(int orderfromId);
+        Task<List<OrderFormUnSignList>> GetUnSignFormsAsync();
 
         //Update Section
 

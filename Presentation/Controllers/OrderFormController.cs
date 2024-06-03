@@ -72,6 +72,13 @@ namespace Presentation.Controllers
             return Ok(orderForms);
         }
 
+        [HttpGet("get/allorderform/{userId}")]
+        public async Task<IActionResult> GetUserOrderFormAsync(int userId)
+        {
+            var orderForms = await _orderServices.GetUserOrderFormAsync(userId);
+            return Ok(orderForms);
+        }
+
         [HttpGet("get/orderform/{orderFormId}")]
         public async Task<IActionResult> GetOrderFormAsync(int orderFormId)
         {
@@ -79,7 +86,7 @@ namespace Presentation.Controllers
             return Ok(orderForm);
         }
 
-        [HttpGet("get/orderform/user/{userId}")]
+        [HttpGet("get/orderform/creator/{userId}")]
         public async Task<IActionResult> GetOrderByUserAsync(int userId)
         {
             var orderForm = await _orderServices.GetOrderByUserAsync(userId);
@@ -141,6 +148,13 @@ namespace Presentation.Controllers
             return Ok(orderFormStatus);
         }
 
+        [HttpGet("get/orderform/unsign")]
+        public async Task<IActionResult> GetUnSignFormsAsync()
+        {
+            var unSignForms = await _orderServices.GetUnSignFormsAsync();
+            return Ok(unSignForms);
+        }
+
         /*
          * PUT Section
          */
@@ -148,6 +162,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> UpdateOrderDetailAsync(OrderFormDetail orderItems)
         {
             await _orderServices.UpdateOrderDetailAsync(orderItems);
+            return Ok();
+        }
+
+        [HttpPut("update/orderform/detail/totalprice/{orderFormId}")]
+        public async Task<IActionResult> UpdateOrderDetailTotalPriceAsync(int orderFormId)
+        {
+            await _orderServices.UpdateOrderDetailTotalPriceAsync(orderFormId);
             return Ok();
         }
 

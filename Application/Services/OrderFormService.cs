@@ -25,6 +25,14 @@ namespace Application.Services
         {
             return await _orderRepository.CreateOrderAsync(orderForm);
         }
+
+        public async Task<List<OrderForm>> GetUserOrderFormAsync(int userId)
+        {
+            var orderForms = await _orderRepository.GetUserOrderFormAsync(userId);
+            return orderForms;
+        }
+
+
         public async Task<int> CreatOrderFormDetailAsync(OrderFormDetail orderItems)
         {
             return await _orderRepository.CreatOrderDetailAsync(orderItems);
@@ -148,6 +156,12 @@ namespace Application.Services
         {
             var orderFormDepartments = await _orderRepository.GetOrderFormDepartmentAsync(orderFormId);
             return orderFormDepartments;
+        }
+
+        public async Task<List<OrderFormUnSignList>> GetUnSignFormsAsync()
+        {
+            var unSignForms = await _orderRepository.GetUnSignFormsAsync();
+            return unSignForms;
         }
 
         /*

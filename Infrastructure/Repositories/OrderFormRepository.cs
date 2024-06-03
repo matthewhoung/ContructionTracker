@@ -152,6 +152,30 @@ namespace Infrastructure.Repositories
             return orders.AsList();
         }
 
+        public async Task<List<OrderForm>> GetUserOrderFormAsync(int userId)
+        {
+            var readCommand = @"
+                    SELECT 
+                        id AS Id,
+                        creator_id AS CreatorId,
+                        project_id AS ProjectId,
+                        status AS Status,
+                        order_name AS OrderName,
+                        order_description AS OrderDescription,  
+                        created_at AS CreatedAt, 
+                        updated_at AS UpdatedAt
+                    FROM orderforms
+                    WHERE creator_id = @UserId
+                    OR id IN (
+                        SELECT orderform_id
+                        FROM orderforms_checklist
+                        WHERE user_id = @UserId AND is_checked = 0
+                        )";
+            var parameters = new { UserId = userId };
+            var orders = await _dbConnection.QueryAsync<OrderForm>(readCommand, parameters);
+            return orders.AsList();
+        }
+
         public async Task<OrderForm> GetOrderByIdAsync(int orderFormId)
         {
             var readCommand = @"
@@ -315,6 +339,19 @@ namespace Infrastructure.Repositories
             var parameters = new { OrderFormId = orderfromId };
             var status = await _dbConnection.QuerySingleOrDefaultAsync<string>(readCommand, parameters);
             return status;
+        }
+
+        public async Task<List<OrderFormUnSignList>> GetUnSignFormsAsync()
+        {
+            var readCommand = @"
+            SELECT
+                orderform_id AS OrderFormId,
+                user_id AS UserId,
+                is_checked AS IsChecked
+            FROM orderforms_checklist
+            WHERE is_checked = 0";
+            var unSignForms = await _dbConnection.QueryAsync<OrderFormUnSignList>(readCommand);
+            return unSignForms.AsList();
         }
 
         /*

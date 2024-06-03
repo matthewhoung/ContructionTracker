@@ -23,6 +23,7 @@ namespace Application.Application
 
         //Read Section
         Task<List<OrderForm>> GetOrderAllAsync();
+        Task<List<OrderForm>> GetUserOrderFormAsync(int userId);
         Task<OrderForm> GetOrderByIdAsync(int orderFormId);
         Task<List<OrderForm>> GetOrderByUserAsync(int userId);
         Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId);
@@ -33,6 +34,7 @@ namespace Application.Application
         Task<List<OrderFormDepartment>> GetOrderFormDepartmentAsync(int orderFormId);
         Task<Dictionary<string, int>> GetOrderFormStatusCountAsync();
         Task<string> GetOrderFormStatus(int orderfromId);
+        Task<List<OrderFormUnSignList>> GetUnSignFormsAsync();
 
         //Update Section
 
