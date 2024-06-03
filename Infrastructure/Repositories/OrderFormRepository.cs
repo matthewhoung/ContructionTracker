@@ -1,5 +1,4 @@
 ﻿using Application.Application;
-using Application.DTOs;
 using Core.Entities.Forms;
 using Core.Entities.Forms.Orders;
 using Core.Entities.Settings;
@@ -157,8 +156,7 @@ namespace Infrastructure.Repositories
                         project_id AS ProjectId,
                         status AS Status,
                         order_name AS OrderName,
-                        order_description AS OrderDescription, 
-                        department_id AS DepartmentId, 
+                        order_description AS OrderDescription,  
                         created_at AS CreatedAt, 
                         updated_at AS UpdatedAt
                     FROM orderforms
@@ -187,13 +185,12 @@ namespace Infrastructure.Repositories
             return orders.AsList();
         }
 
-
         public async Task<List<OrderFormDetail>> GetOrderDetailAsync(int orderFormId)
         {
             var readCommand = @"
                     SELECT 
                         detail_id AS DetailId,
-                        orderform_id AS OrderFormId,
+                        orderform_id AS OrderId,
                         item_name AS ItemName,
                         item_description AS ItemDescription,
                         quantity AS Quantity,
