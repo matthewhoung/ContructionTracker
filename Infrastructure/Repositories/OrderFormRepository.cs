@@ -38,6 +38,7 @@ namespace Infrastructure.Repositories
                     SELECT LAST_INSERT_ID();";
             return await _dbConnection.ExecuteScalarAsync<int>(writeCommand, order);
         }
+
         public async Task<int> CreatOrderDetailAsync(OrderFormDetail orderItems)
         {
             var writeCommand = @"
@@ -246,23 +247,6 @@ namespace Infrastructure.Repositories
             return totalPrice;
         }
 
-        public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
-        {
-            var readCommand = @"
-                    SELECT
-                        o.id AS OrderId,
-                        o.order_name AS OrderName,
-                        r.role_name AS RoleName,
-                        oc.user_id AS UserId,
-                        oc.is_checked AS isChecked
-                    FROM orderforms o
-                    JOIN orderforms_checklist oc ON o.id = oc.orderform_id
-                    JOIN roles r ON oc.role_id = r.role_id
-                    WHERE o.id = @OrderFormId;";
-            var getStatus = await _dbConnection.QueryAsync<OrderFormStatus>(readCommand, new { OrderFormId = orderFormId });
-            return getStatus.AsList();
-        }
-
         public async Task<OrderFormPayInfo> GetOrderFormPayInfoAsync(int orderFormId)
         {
             var readCommand = @"
@@ -353,6 +337,22 @@ namespace Infrastructure.Repositories
             var unSignForms = await _dbConnection.QueryAsync<OrderFormUnSignList>(readCommand);
             return unSignForms.AsList();
         }
+        public async Task<List<OrderFormStatus>> GetOrderFormSignitureAsync(int orderFormId)
+        {
+            var readCommand = @"
+                    SELECT
+                        o.id AS OrderId,
+                        o.order_name AS OrderName,
+                        r.role_name AS RoleName,
+                        oc.user_id AS UserId,
+                        oc.is_checked AS isChecked
+                    FROM orderforms o
+                    JOIN orderforms_checklist oc ON o.id = oc.orderform_id
+                    JOIN roles r ON oc.role_id = r.role_id
+                    WHERE o.id = @OrderFormId;";
+            var getStatus = await _dbConnection.QueryAsync<OrderFormStatus>(readCommand, new { OrderFormId = orderFormId });
+            return getStatus.AsList();
+        }
 
         /*
          * Update Section
@@ -426,7 +426,11 @@ namespace Infrastructure.Repositories
                     UPDATE orderforms_payinfo
                     SET pay_amount = @TotalPrice
                     WHERE orderform_id = @OrderFormId";
-            var parameter = new { TotalPrice = sumTotalPrice, OrderFormId = orderFormId };
+            var parameter = new 
+            { 
+                TotalPrice = sumTotalPrice, 
+                OrderFormId = orderFormId 
+            };
             await _dbConnection.ExecuteAsync(updateCommand, parameter);
         }
 
